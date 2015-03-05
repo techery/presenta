@@ -7,13 +7,13 @@ import java.lang.annotation.Target;
 import mortar.MortarScope;
 
 /**
- * Marks a screen as defining a {@link MortarScope}, with the class of a Dagger module
- * to instantiate via reflection. The module must be a static type with a default
- * constructor. For more flexibility, use {@link WithComponentFactory}.
+ * Marks a screen as defining a {@link MortarScope}, with a factory class to
+ * create its Dagger module.
  *
+ * @see WithComponent
  * @see ScreenScoper
  */
 @Target(ElementType.TYPE) @Retention(RetentionPolicy.RUNTIME)
-public @interface WithComponent {
-  Class<?> value();
+public @interface WithPresenterFactory {
+  Class<? extends PresenterFactory> value();
 }

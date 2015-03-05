@@ -23,16 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mortar.R;
+import com.example.mortar.mortarscreen.BasePresenter;
 import com.example.mortar.screen.MessageScreen;
 
-import javax.inject.Inject;
-
-import mortar.dagger2support.DaggerService;
-
-import static com.example.mortar.screen.MessageScreen.Component;
-
 public class MessageView extends LinearLayout {
-  @Inject MessageScreen.Presenter presenter;
+  MessageScreen.Presenter presenter;
 
   private TextView userView;
   private TextView messageView;
@@ -40,7 +35,7 @@ public class MessageView extends LinearLayout {
   public MessageView(Context context, AttributeSet attrs) {
     super(context, attrs);
     setOrientation(VERTICAL);
-    DaggerService.<Component>getDaggerComponent(context).inject(this);
+    presenter = BasePresenter.getPresenter(context);
   }
 
   @Override protected void onFinishInflate() {

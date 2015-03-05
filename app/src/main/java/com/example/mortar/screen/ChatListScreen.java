@@ -18,56 +18,39 @@ package com.example.mortar.screen;
 import android.os.Bundle;
 
 import com.example.mortar.R;
-import com.example.mortar.core.MortarDemoApplication;
+import com.example.mortar.core.ScreenComponent;
 import com.example.mortar.model.Chat;
 import com.example.mortar.model.Chats;
-import com.example.mortar.mortarscreen.ScreenScope;
-import com.example.mortar.mortarscreen.WithComponent;
+import com.example.mortar.mortarscreen.BasePresenter;
+import com.example.mortar.mortarscreen.WithPresenter;
 import com.example.mortar.view.ChatListView;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.Provides;
 import flow.Flow;
 import flow.Layout;
 import flow.Path;
-import mortar.ViewPresenter;
 
-import static com.example.mortar.screen.ChatListScreen.Component.Module;
-
-@Layout(R.layout.chat_list_view) @WithComponent(ChatListScreen.Component.class)
+@Layout(R.layout.chat_list_view) @WithPresenter(ChatListScreen.Presenter.class)
 public class ChatListScreen extends Path {
 
-  @ScreenScope
-  @dagger.Component(dependencies = MortarDemoApplication.AppComponent.class, modules = Module.class)
-  public interface Component {
+  public static class Presenter extends BasePresenter<ChatListView> {
 
-    void inject(ChatListView view);
+    @Inject Chats chats;
+    List<Chat> chatList;
 
-    @dagger.Module(library = true, complete = false)
-    public static class Module {
-      @Provides
-      @ScreenScope List<Chat> provideConversations(Chats chats) {
-        return chats.getAll();
-      }
-    }
-
-  }
-
-  @ScreenScope
-  public static class Presenter extends ViewPresenter<ChatListView> {
-    private final List<Chat> chats;
-
-    @Inject Presenter(List<Chat> chats) {
-      this.chats = chats;
+    public Presenter(ScreenComponent screenComponent) {
+      super(screenComponent);
+      screenComponent.inject(this);
+      this.chatList = chats.getAll();
     }
 
     @Override public void onLoad(Bundle savedInstanceState) {
       super.onLoad(savedInstanceState);
       if (!hasView()) return;
-      getView().showConversations(chats);
+      getView().showConversations(chatList);
     }
 
     public void onConversationSelected(int position) {

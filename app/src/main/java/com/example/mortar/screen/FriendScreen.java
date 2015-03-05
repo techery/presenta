@@ -18,23 +18,20 @@ package com.example.mortar.screen;
 import android.os.Bundle;
 
 import com.example.mortar.R;
+import com.example.mortar.core.ScreenComponent;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.User;
-import com.example.mortar.mortarscreen.ScreenScope;
-import com.example.mortar.mortarscreen.WithComponent;
+import com.example.mortar.mortarscreen.BasePresenter;
+import com.example.mortar.mortarscreen.WithPresenter;
 import com.example.mortar.view.FriendView;
 
 import javax.inject.Inject;
 
-import dagger.Provides;
 import flow.HasParent;
 import flow.Layout;
 import flow.Path;
-import mortar.ViewPresenter;
 
-import static com.example.mortar.core.MortarDemoApplication.AppComponent;
-
-@Layout(R.layout.friend_view) @WithComponent(FriendScreen.Component.class)
+@Layout(R.layout.friend_view) @WithPresenter(FriendScreen.Presenter.class)
 public class FriendScreen extends Path implements HasParent {
   private final int index;
 
@@ -46,25 +43,14 @@ public class FriendScreen extends Path implements HasParent {
     return new FriendListScreen();
   }
 
-  @ScreenScope
-  @dagger.Component(dependencies = AppComponent.class, modules = Module.class)
-  public interface Component {
-    void inject(FriendView view);
-  }
-
-  @dagger.Module
-  public class Module {
-    @Provides User provideFriend(Chats chats) {
-      return chats.getFriend(index);
-    }
-  }
-
-  @ScreenScope
-  public static class Presenter extends ViewPresenter<FriendView> {
+  public class Presenter extends BasePresenter<FriendView> {
+    @Inject Chats service;
     private final User friend;
 
-    @Inject Presenter(User friend) {
-      this.friend = friend;
+    public Presenter(ScreenComponent component) {
+      super(component);
+      component.inject(this);
+      this.friend = service.getFriend(index);
     }
 
     @Override public void onLoad(Bundle savedInstanceState) {

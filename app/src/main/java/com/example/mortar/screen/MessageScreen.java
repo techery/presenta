@@ -18,27 +18,23 @@ package com.example.mortar.screen;
 import android.os.Bundle;
 
 import com.example.mortar.R;
-import com.example.mortar.core.RootModule;
+import com.example.mortar.core.ScreenComponent;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.Message;
-import com.example.mortar.mortarscreen.ScreenScope;
-import com.example.mortar.mortarscreen.WithComponent;
+import com.example.mortar.mortarscreen.BasePresenter;
+import com.example.mortar.mortarscreen.WithPresenter;
 import com.example.mortar.view.MessageView;
 
 import javax.inject.Inject;
 
-import dagger.Provides;
 import flow.Flow;
 import flow.HasParent;
 import flow.Layout;
 import flow.Path;
-import mortar.ViewPresenter;
 import rx.Observable;
 import rx.functions.Action1;
 
-import static com.example.mortar.core.MortarDemoApplication.AppComponent;
-
-@Layout(R.layout.message_view) @WithComponent(MessageScreen.Component.class)
+@Layout(R.layout.message_view) @WithPresenter(MessageScreen.Presenter.class)
 public class MessageScreen extends Path implements HasParent {
   private final int chatId;
   private final int messageId;
@@ -52,27 +48,15 @@ public class MessageScreen extends Path implements HasParent {
     return new ChatScreen(chatId);
   }
 
-  @ScreenScope
-  @dagger.Component(dependencies = AppComponent.class, modules = Module.class)
-  public interface Component {
-    void inject(MessageView view);
-  }
-
-  @dagger.Module(injects = MessageView.class, addsTo = RootModule.class)
-  public class Module {
-    @Provides Observable<Message> provideMessage(Chats chats) {
-      return chats.getChat(chatId).getMessage(messageId);
-    }
-  }
-
-  @ScreenScope
-  public static class Presenter extends ViewPresenter<MessageView> {
+  public class Presenter extends BasePresenter<MessageView> {
     private final Observable<Message> messageSource;
-
     private Message message;
+    @Inject Chats service;
 
-    @Inject Presenter(Observable<Message> messageSource) {
-      this.messageSource = messageSource;
+    public Presenter(ScreenComponent component) {
+      super(component);
+      component.inject(this);
+      this.messageSource = service.getChat(chatId).getMessage(messageId);
     }
 
     @Override public void onLoad(Bundle savedInstanceState) {

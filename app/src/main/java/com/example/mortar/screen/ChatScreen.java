@@ -20,33 +20,31 @@ import android.util.Log;
 
 import com.example.mortar.R;
 import com.example.mortar.android.ActionBarOwner;
+import com.example.mortar.core.ScreenComponent;
 import com.example.mortar.model.Chat;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.Message;
-import com.example.mortar.mortarscreen.ScreenScope;
-import com.example.mortar.mortarscreen.WithComponent;
+import com.example.mortar.mortarscreen.BasePresenter;
+import com.example.mortar.mortarscreen.WithPresenter;
 import com.example.mortar.view.ChatView;
 import com.example.mortar.view.Confirmation;
 
 import javax.inject.Inject;
 
-import dagger.Provides;
 import flow.Flow;
 import flow.HasParent;
 import flow.Layout;
 import flow.Path;
 import mortar.PopupPresenter;
-import mortar.ViewPresenter;
 import rx.Observer;
 import rx.Subscription;
 import rx.functions.Action0;
 import rx.subscriptions.Subscriptions;
 
-import static com.example.mortar.core.MortarDemoApplication.AppComponent;
-
-@Layout(R.layout.chat_view) @WithComponent(ChatScreen.Component.class)
+@Layout(R.layout.chat_view) @WithPresenter(ChatScreen.Presenter.class)
 public class ChatScreen extends Path implements HasParent {
-  private final int conversationIndex;
+
+  private final int conversationIndex; // available in presenter as outer class field
 
   public ChatScreen(int conversationIndex) {
     this.conversationIndex = conversationIndex;
@@ -56,35 +54,21 @@ public class ChatScreen extends Path implements HasParent {
     return new ChatListScreen();
   }
 
-  @ScreenScope
-  @dagger.Component(dependencies = AppComponent.class, modules = Module.class)
-  public interface Component {
+  ///////////////////////////////////////////////////////////////////////////
+  // Presenter
+  ///////////////////////////////////////////////////////////////////////////
 
-    void inject(ChatView view);
-
-  }
-
-  @dagger.Module
-  public class Module {
-    @Provides
-    @ScreenScope
-    Chat provideConversation(Chats chats) {
-      return chats.getChat(conversationIndex);
-    }
-  }
-
-  @ScreenScope
-  public static class Presenter extends ViewPresenter<ChatView> {
+  public class Presenter extends BasePresenter<ChatView> {
+    @Inject Chats chats;
+    @Inject ActionBarOwner actionBar;
     private final Chat chat;
-    private final ActionBarOwner actionBar;
     private final PopupPresenter<Confirmation, Boolean> confirmer;
-
     private Subscription running = Subscriptions.empty();
 
-    @Inject
-    public Presenter(Chat chat, ActionBarOwner actionBar) {
-      this.chat = chat;
-      this.actionBar = actionBar;
+    public Presenter(ScreenComponent screenComponent) {
+      super(screenComponent);
+      this.screenComponent.inject(this);
+      this.chat = chats.getChat(conversationIndex);
       this.confirmer = new PopupPresenter<Confirmation, Boolean>() {
         @Override protected void onPopupResult(Boolean confirmed) {
           if (confirmed) Presenter.this.getView().toast("Haven't implemented that, friend.");
@@ -149,7 +133,7 @@ public class ChatScreen extends Path implements HasParent {
     }
 
     private void ensureStopped() {
-      running.unsubscribe();
+      if (running != null) running.unsubscribe();
     }
   }
 }

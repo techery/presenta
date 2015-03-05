@@ -25,22 +25,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.mortar.model.Message;
+import com.example.mortar.mortarscreen.BasePresenter;
 import com.example.mortar.screen.ChatScreen;
 
-import javax.inject.Inject;
-
-import mortar.dagger2support.DaggerService;
-
-import static com.example.mortar.screen.ChatScreen.Component;
 
 public class ChatView extends ListView {
-  @Inject ChatScreen.Presenter presenter;
+  ChatScreen.Presenter presenter;
 
   private final ConfirmerPopup confirmerPopup;
 
   public ChatView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    DaggerService.<Component>getDaggerComponent(context).inject(this);
+    presenter = BasePresenter.getPresenter(context);
     confirmerPopup = new ConfirmerPopup(context);
 
     setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);

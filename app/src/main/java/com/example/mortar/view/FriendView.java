@@ -22,19 +22,14 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.mortar.R;
+import com.example.mortar.mortarscreen.BasePresenter;
 import com.example.mortar.screen.FriendScreen;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import mortar.dagger2support.DaggerService;
-
-import static com.example.mortar.screen.FriendScreen.Component;
 
 public class FriendView extends FrameLayout {
 
-  @Inject
   FriendScreen.Presenter presenter;
 
   @InjectView(R.id.friend_info)
@@ -42,7 +37,7 @@ public class FriendView extends FrameLayout {
 
   public FriendView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    DaggerService.<Component>getDaggerComponent(context).inject(this);
+    presenter = BasePresenter.getPresenter(context);
   }
 
   @Override

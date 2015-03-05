@@ -22,21 +22,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
 import com.example.mortar.model.Chat;
+import com.example.mortar.mortarscreen.BasePresenter;
 import com.example.mortar.screen.ChatListScreen;
+
 import java.util.List;
-import javax.inject.Inject;
 
-import mortar.dagger2support.DaggerService;
-
-import static com.example.mortar.screen.ChatListScreen.Component;
 
 public class ChatListView extends ListView {
-  @Inject ChatListScreen.Presenter presenter;
+  ChatListScreen.Presenter presenter;
 
   public ChatListView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    DaggerService.<Component>getDaggerComponent(context).inject(this);
+    presenter = BasePresenter.getPresenter(context);
   }
 
   @Override protected void onAttachedToWindow() {

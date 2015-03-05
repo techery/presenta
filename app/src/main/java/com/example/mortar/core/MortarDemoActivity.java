@@ -56,7 +56,7 @@ public class MortarDemoActivity extends android.app.Activity
 
   @ScreenScope
   @dagger.Component(dependencies = MortarDemoApplication.AppComponent.class)
-  public interface Component extends MortarDemoApplication.AppComponent {
+  public interface Component extends MortarDemoApplication.AppComponent, ScreenComponent {
     void inject(MortarDemoActivity activity);
   }
 

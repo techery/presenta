@@ -24,22 +24,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.mortar.model.User;
+import com.example.mortar.mortarscreen.BasePresenter;
 import com.example.mortar.screen.FriendListScreen;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-import mortar.dagger2support.DaggerService;
-
-import static com.example.mortar.screen.FriendListScreen.Component;
-
 public class FriendListView extends ListView {
-  @Inject FriendListScreen.Presenter presenter;
+  FriendListScreen.Presenter presenter;
 
   public FriendListView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    DaggerService.<Component>getDaggerComponent(context).inject(this);
+    presenter = BasePresenter.getPresenter(context);
   }
 
   @Override protected void onAttachedToWindow() {
