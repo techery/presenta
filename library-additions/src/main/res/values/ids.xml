@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="mortar_screen_switcher_tag" type="id"/>
+
+    <item name="master_container" type="id"/>
+    <item name="detail_container" type="id"/>
+</resources>

@@ -1,0 +1,23 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+dependencies {
+    compile 'com.github.square:flow:34448a24f04d1d29c70d3641fab5638c66fb5c9f'
+    compile 'com.squareup.mortar:mortar:0.17-SNAPSHOT'
+    compile 'com.squareup.mortar:dagger2support:0.17-SNAPSHOT'
+}
