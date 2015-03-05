@@ -22,7 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.mortar.R;
-import com.example.mortar.mortarscreen.BasePresenter;
+import com.example.mortar.core.PresenterService;
 import com.example.mortar.screen.FriendScreen;
 
 import butterknife.ButterKnife;
@@ -37,7 +37,7 @@ public class FriendView extends FrameLayout {
 
   public FriendView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    presenter = BasePresenter.getPresenter(context);
+    presenter = PresenterService.getPresenter(context);
   }
 
   @Override

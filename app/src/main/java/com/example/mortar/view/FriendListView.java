@@ -23,8 +23,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.mortar.core.PresenterService;
 import com.example.mortar.model.User;
-import com.example.mortar.mortarscreen.BasePresenter;
 import com.example.mortar.screen.FriendListScreen;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class FriendListView extends ListView {
 
   public FriendListView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    presenter = BasePresenter.getPresenter(context);
+    presenter = PresenterService.getPresenter(context);
   }
 
   @Override protected void onAttachedToWindow() {

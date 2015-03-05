@@ -18,10 +18,9 @@ package com.example.mortar.screen;
 import android.os.Bundle;
 
 import com.example.mortar.R;
-import com.example.mortar.core.ScreenComponent;
 import com.example.mortar.model.Chat;
 import com.example.mortar.model.Chats;
-import com.example.mortar.mortarscreen.BasePresenter;
+import com.example.mortar.mortarscreen.InjectablePresenter;
 import com.example.mortar.mortarscreen.WithPresenter;
 import com.example.mortar.view.ChatListView;
 
@@ -36,14 +35,13 @@ import flow.Path;
 @Layout(R.layout.chat_list_view) @WithPresenter(ChatListScreen.Presenter.class)
 public class ChatListScreen extends Path {
 
-  public static class Presenter extends BasePresenter<ChatListView> {
+  public static class Presenter extends InjectablePresenter<ChatListView> {
 
     @Inject Chats chats;
     List<Chat> chatList;
 
-    public Presenter(ScreenComponent screenComponent) {
-      super(screenComponent);
-      screenComponent.inject(this);
+    public Presenter(PresenterInjector injector) {
+      super(injector);
       this.chatList = chats.getAll();
     }
 

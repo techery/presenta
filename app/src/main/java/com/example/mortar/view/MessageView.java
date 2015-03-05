@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mortar.R;
-import com.example.mortar.mortarscreen.BasePresenter;
+import com.example.mortar.core.PresenterService;
 import com.example.mortar.screen.MessageScreen;
 
 public class MessageView extends LinearLayout {
@@ -35,7 +35,7 @@ public class MessageView extends LinearLayout {
   public MessageView(Context context, AttributeSet attrs) {
     super(context, attrs);
     setOrientation(VERTICAL);
-    presenter = BasePresenter.getPresenter(context);
+    presenter = PresenterService.getPresenter(context);
   }
 
   @Override protected void onFinishInflate() {

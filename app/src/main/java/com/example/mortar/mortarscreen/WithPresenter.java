@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE) @Retention(RetentionPolicy.RUNTIME)
 public @interface WithPresenter {
-  Class<? extends BasePresenter> value();
+  Class<? extends InjectablePresenter> value();
 }

@@ -2,11 +2,14 @@ package com.example.mortar.mortarscreen;
 
 import android.content.Context;
 
+import com.example.mortar.core.PresenterService;
 import com.example.mortar.core.ScreenComponent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,6 +17,7 @@ import flow.Path;
 import mortar.MortarScope;
 import mortar.dagger2support.DaggerService;
 
+import static com.example.mortar.mortarscreen.InjectablePresenter.PresenterInjector;
 import static java.lang.String.format;
 
 /**
@@ -57,7 +61,7 @@ public class ScreenScoper {
 
     childScope = parentScope
         .buildChild(name)
-        .withService(BasePresenter.SERVICE_NAME, presenter)
+        .withService(PresenterService.SERVICE_NAME, presenter)
         .build();
 
     return childScope;
@@ -70,8 +74,12 @@ public class ScreenScoper {
 
     WithPresenter withPresenter = screenType.getAnnotation(WithPresenter.class);
     if (withPresenter != null) {
-      Class<?> presenterCalss = withPresenter.value();
-      presenterFactory = new SimplePresenterFactory(presenterCalss);
+      Class<?> presenterClass = withPresenter.value();
+      if (InjectablePresenter.class.isAssignableFrom(presenterClass)) {
+        presenterFactory = new InjectablePresenterFactory(presenterClass);
+      } else {
+        presenterFactory = new SimplePresenterFactory(presenterClass);
+      }
     }
 
     if (presenterFactory == null) {
@@ -95,28 +103,108 @@ public class ScreenScoper {
     return presenterFactory;
   }
 
-  private static class SimplePresenterFactory extends PresenterFactory<Path> {
-    private final Class presenterClass;
+  ///////////////////////////////////////////////////////////////////////////
+  // Presenter factories
+  ///////////////////////////////////////////////////////////////////////////
+
+  private static abstract class BasePresenterFactory extends PresenterFactory<Path> {
+    protected final Class presenterClass;
+
+    public BasePresenterFactory(Class presenterClass) {
+      this.presenterClass = presenterClass;
+    }
+  }
+
+  private static class SimplePresenterFactory extends BasePresenterFactory {
 
     private SimplePresenterFactory(Class presenterClass) {
-      this.presenterClass = presenterClass;
+      super(presenterClass);
+    }
+
+    @Override
+    protected Object createPresenter(Context context, Path screen) {
+      try {
+        Constructor constructor;
+        if (Modifier.isStatic(presenterClass.getModifiers())) {
+          constructor = presenterClass.getDeclaredConstructor();
+          return constructor.newInstance();
+        } else {
+          constructor = presenterClass.getDeclaredConstructor(screen.getClass());
+          return constructor.newInstance(screen);
+        }
+      } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
+  }
+
+  private static class InjectablePresenterFactory extends BasePresenterFactory {
+
+    public InjectablePresenterFactory(Class presenterClass) {
+      super(presenterClass);
     }
 
     @Override protected Object createPresenter(Context context, Path screen) {
-      ScreenComponent screenComponent = DaggerService.getDaggerComponent(context);
-          try {
-            Constructor constructor;
-            if (Modifier.isStatic(presenterClass.getModifiers())) {
-              constructor = presenterClass.getDeclaredConstructor(ScreenComponent.class);
-              return constructor.newInstance(screenComponent);
-            } else{
-              constructor = presenterClass.getDeclaredConstructor(screen.getClass(), ScreenComponent.class);
-              return constructor.newInstance(screen, screenComponent);
+      final ScreenComponent screenComponent = DaggerService.getDaggerComponent(context);
+      PresenterInjector injector = new ComponentInjector(presenterClass, screenComponent);
+      try {
+        Constructor constructor;
+        if (Modifier.isStatic(presenterClass.getModifiers())) {
+          constructor = presenterClass.getDeclaredConstructor(PresenterInjector.class);
+          return constructor.newInstance(injector);
+        } else{
+          constructor = presenterClass.getDeclaredConstructor(screen.getClass(), PresenterInjector.class);
+          return constructor.newInstance(screen, injector);
+        }
+      } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
+
+    private static class ComponentInjector implements PresenterInjector {
+
+      private static final Map<Class<InjectablePresenter>, Method> cache = new HashMap<>();
+      private Class presenterClass;
+      private ScreenComponent screenComponent;
+
+      private ComponentInjector(Class presenterClass, ScreenComponent screenComponent) {
+        this.presenterClass = presenterClass;
+        this.screenComponent = screenComponent;
+      }
+
+      @Override
+      public void inject(InjectablePresenter presenter) {
+        try {
+          Method injectableMethod = findInjectableMethod();
+          injectableMethod.invoke(screenComponent, presenter);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+          e.printStackTrace();
+        } catch (NoSuchMethodException | NullPointerException e) {
+          String detailMessage = "No graph method found to inject " + presenterClass.getSimpleName() + ". Check your component";
+          NullPointerException exception = new NullPointerException(detailMessage);
+          exception.setStackTrace(e.getStackTrace());
+          throw exception;
+        }
+      }
+
+      private Method findInjectableMethod() throws NoSuchMethodException {
+        Method cachedMethod = cache.get(presenterClass);
+        if (cachedMethod != null) {
+          return screenComponent.getClass().getDeclaredMethod(cachedMethod.getName(), presenterClass);
+        }
+        // Find proper injectable method of component to inject presenter instance
+        for (Method m : screenComponent.getClass().getDeclaredMethods()) {
+          for (Class pClass : m.getParameterTypes()) {
+            if (pClass.equals(presenterClass)) {
+              cache.put(presenterClass, m);
+              return m;
             }
-          } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
           }
+        }
         return null;
+      }
     }
   }
 

@@ -20,11 +20,10 @@ import android.util.Log;
 
 import com.example.mortar.R;
 import com.example.mortar.android.ActionBarOwner;
-import com.example.mortar.core.ScreenComponent;
 import com.example.mortar.model.Chat;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.Message;
-import com.example.mortar.mortarscreen.BasePresenter;
+import com.example.mortar.mortarscreen.InjectablePresenter;
 import com.example.mortar.mortarscreen.WithPresenter;
 import com.example.mortar.view.ChatView;
 import com.example.mortar.view.Confirmation;
@@ -58,16 +57,15 @@ public class ChatScreen extends Path implements HasParent {
   // Presenter
   ///////////////////////////////////////////////////////////////////////////
 
-  public class Presenter extends BasePresenter<ChatView> {
+  public class Presenter extends InjectablePresenter<ChatView> {
     @Inject Chats chats;
     @Inject ActionBarOwner actionBar;
     private final Chat chat;
     private final PopupPresenter<Confirmation, Boolean> confirmer;
     private Subscription running = Subscriptions.empty();
 
-    public Presenter(ScreenComponent screenComponent) {
-      super(screenComponent);
-      this.screenComponent.inject(this);
+    public Presenter(PresenterInjector injector) {
+      super(injector);
       this.chat = chats.getChat(conversationIndex);
       this.confirmer = new PopupPresenter<Confirmation, Boolean>() {
         @Override protected void onPopupResult(Boolean confirmed) {

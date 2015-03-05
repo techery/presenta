@@ -24,8 +24,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.mortar.core.PresenterService;
 import com.example.mortar.model.Message;
-import com.example.mortar.mortarscreen.BasePresenter;
 import com.example.mortar.screen.ChatScreen;
 
 
@@ -36,7 +36,7 @@ public class ChatView extends ListView {
 
   public ChatView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    presenter = BasePresenter.getPresenter(context);
+    presenter = PresenterService.getPresenter(context);
     confirmerPopup = new ConfirmerPopup(context);
 
     setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);

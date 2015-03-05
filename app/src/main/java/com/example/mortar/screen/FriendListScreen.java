@@ -18,10 +18,9 @@ package com.example.mortar.screen;
 import android.os.Bundle;
 
 import com.example.mortar.R;
-import com.example.mortar.core.ScreenComponent;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.User;
-import com.example.mortar.mortarscreen.BasePresenter;
+import com.example.mortar.mortarscreen.InjectablePresenter;
 import com.example.mortar.mortarscreen.WithPresenter;
 import com.example.mortar.view.FriendListView;
 
@@ -37,13 +36,12 @@ import flow.Path;
 @Layout(R.layout.friend_list_view) @WithPresenter(FriendListScreen.Presenter.class)
 public class FriendListScreen extends Path implements HasParent {
 
-  public static class Presenter extends BasePresenter<FriendListView> {
+  public static class Presenter extends InjectablePresenter<FriendListView> {
     List<User> friends;
     @Inject Chats service;
 
-    public Presenter(ScreenComponent component) {
-      super(component);
-      component.inject(this);
+    public Presenter(PresenterInjector injector) {
+      super(injector);
       this.friends = service.getFriends();
     }
 
