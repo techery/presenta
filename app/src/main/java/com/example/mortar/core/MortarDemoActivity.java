@@ -26,6 +26,7 @@ import com.example.mortar.R;
 import com.example.mortar.android.ActionBarOwner;
 import com.example.mortar.flow.GsonParceler;
 import com.example.mortar.flow.pathview.HandlesBack;
+import com.example.mortar.mortarscreen.ScreenScope;
 import com.example.mortar.screen.ChatListScreen;
 import com.example.mortar.screen.FriendListScreen;
 import com.google.gson.Gson;
@@ -40,7 +41,7 @@ import flow.PathContainerView;
 import mortar.MortarScope;
 import mortar.MortarScopeDevHelper;
 import mortar.bundler.BundleServiceRunner;
-import mortar.dagger1support.ObjectGraphService;
+import mortar.dagger2support.DaggerService;
 import rx.functions.Action0;
 
 import static android.view.MenuItem.SHOW_AS_ACTION_ALWAYS;
@@ -52,6 +53,12 @@ import static mortar.bundler.BundleServiceRunner.getBundleServiceRunner;
  */
 public class MortarDemoActivity extends android.app.Activity
     implements ActionBarOwner.Activity, Flow.Dispatcher {
+
+  @ScreenScope
+  @dagger.Component(dependencies = MortarDemoApplication.AppComponent.class)
+  public interface Component extends MortarDemoApplication.AppComponent {
+    void inject(MortarDemoActivity activity);
+  }
 
   private MortarScope activityScope;
   private ActionBarOwner.MenuAction actionBarMenuAction;
@@ -99,15 +106,19 @@ public class MortarDemoActivity extends android.app.Activity
     flowSupport = ActivityFlowSupport.onCreate(nonConfigurationInstance, savedInstanceState, new GsonParceler(new Gson()), backstack);
     MortarScope parentScope = MortarScope.getScope(getApplication());
 
+    Object appComponent = DaggerService.getDaggerComponent(MortarDemoApplication.instance());
+    Component component = DaggerService.createComponent(Component.class, appComponent);
+    component.inject(this);
+
     String scopeName = getLocalClassName() + "-task-" + getTaskId();
     activityScope = parentScope.findChild(scopeName);
     if (activityScope == null) {
       activityScope = parentScope.buildChild(scopeName)
           .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
+          .withService(DaggerService.SERVICE_NAME, component)
           .build();
     }
     BundleServiceRunner.getBundleServiceRunner(activityScope).onCreate(savedInstanceState);
-    ObjectGraphService.inject(this, this);
 
     actionBarOwner.takeView(this);
 

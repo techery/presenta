@@ -17,9 +17,11 @@ package com.example.mortar.android;
 
 import android.content.Context;
 import android.os.Bundle;
+
+import com.example.mortar.mortarscreen.ApplicationScope;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 import mortar.Presenter;
 import mortar.bundler.BundleService;
 import rx.functions.Action0;
@@ -103,7 +105,7 @@ public class ActionBarOwner extends Presenter<ActionBarOwner.Activity> {
 
   @Module(library = true)
   public static class ActionBarModule {
-    @Provides @Singleton ActionBarOwner provideActionBarOwner() {
+    @Provides @ApplicationScope ActionBarOwner provideActionBarOwner() {
       return new ActionBarOwner();
     }
   }

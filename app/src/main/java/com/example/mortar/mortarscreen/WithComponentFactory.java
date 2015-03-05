@@ -10,10 +10,10 @@ import mortar.MortarScope;
  * Marks a screen as defining a {@link MortarScope}, with a factory class to
  * create its Dagger module.
  *
- * @see WithModule
+ * @see WithComponent
  * @see ScreenScoper
  */
 @Target(ElementType.TYPE) @Retention(RetentionPolicy.RUNTIME)
-public @interface WithModuleFactory {
-  Class<? extends ModuleFactory> value();
+public @interface WithComponentFactory {
+  Class<? extends ComponentFactory> value();
 }

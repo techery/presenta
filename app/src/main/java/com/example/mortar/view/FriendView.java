@@ -28,7 +28,9 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import mortar.dagger1support.ObjectGraphService;
+import mortar.dagger2support.DaggerService;
+
+import static com.example.mortar.screen.FriendScreen.Component;
 
 public class FriendView extends FrameLayout {
 
@@ -40,7 +42,7 @@ public class FriendView extends FrameLayout {
 
   public FriendView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    ObjectGraphService.inject(context, this);
+    DaggerService.<Component>getDaggerComponent(context).inject(this);
   }
 
   @Override

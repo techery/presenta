@@ -15,17 +15,20 @@
  */
 package com.example.mortar.model;
 
-import dagger.Provides;
+import com.example.mortar.mortarscreen.ApplicationScope;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import dagger.Provides;
 
 import static java.util.Arrays.asList;
 
-@Singleton
+@ApplicationScope
 public class Chats {
   private final List<Chat> all;
   private final List<User> friends;
@@ -75,10 +78,10 @@ public class Chats {
     return all.get(id);
   }
 
-  @dagger.Module(injects = Chats.class, library = true, complete = false)
+  @dagger.Module(library = true, complete = false)
   public static class Module {
 
-    @Provides @Singleton Executor provideMessagePollThread() {
+    @Provides @ApplicationScope Executor provideMessagePollThread() {
       return Executors.newSingleThreadExecutor();
     }
   }

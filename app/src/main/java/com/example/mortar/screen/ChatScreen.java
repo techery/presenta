@@ -17,22 +17,24 @@ package com.example.mortar.screen;
 
 import android.os.Bundle;
 import android.util.Log;
+
 import com.example.mortar.R;
 import com.example.mortar.android.ActionBarOwner;
-import com.example.mortar.core.RootModule;
 import com.example.mortar.model.Chat;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.Message;
-import com.example.mortar.mortarscreen.WithModule;
+import com.example.mortar.mortarscreen.ScreenScope;
+import com.example.mortar.mortarscreen.WithComponent;
 import com.example.mortar.view.ChatView;
 import com.example.mortar.view.Confirmation;
+
+import javax.inject.Inject;
+
 import dagger.Provides;
 import flow.Flow;
 import flow.HasParent;
 import flow.Layout;
 import flow.Path;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import mortar.PopupPresenter;
 import mortar.ViewPresenter;
 import rx.Observer;
@@ -40,7 +42,9 @@ import rx.Subscription;
 import rx.functions.Action0;
 import rx.subscriptions.Subscriptions;
 
-@Layout(R.layout.chat_view) @WithModule(ChatScreen.Module.class)
+import static com.example.mortar.core.MortarDemoApplication.AppComponent;
+
+@Layout(R.layout.chat_view) @WithComponent(ChatScreen.Component.class)
 public class ChatScreen extends Path implements HasParent {
   private final int conversationIndex;
 
@@ -52,14 +56,24 @@ public class ChatScreen extends Path implements HasParent {
     return new ChatListScreen();
   }
 
-  @dagger.Module(injects = ChatView.class, addsTo = RootModule.class)
+  @ScreenScope
+  @dagger.Component(dependencies = AppComponent.class, modules = Module.class)
+  public interface Component {
+
+    void inject(ChatView view);
+
+  }
+
+  @dagger.Module
   public class Module {
-    @Provides Chat provideConversation(Chats chats) {
+    @Provides
+    @ScreenScope
+    Chat provideConversation(Chats chats) {
       return chats.getChat(conversationIndex);
     }
   }
 
-  @Singleton
+  @ScreenScope
   public static class Presenter extends ViewPresenter<ChatView> {
     private final Chat chat;
     private final ActionBarOwner actionBar;

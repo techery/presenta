@@ -18,14 +18,13 @@ package com.example.mortar.screen;
 import android.os.Bundle;
 
 import com.example.mortar.R;
-import com.example.mortar.core.RootModule;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.User;
-import com.example.mortar.mortarscreen.WithModule;
+import com.example.mortar.mortarscreen.ScreenScope;
+import com.example.mortar.mortarscreen.WithComponent;
 import com.example.mortar.view.FriendView;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dagger.Provides;
 import flow.HasParent;
@@ -33,7 +32,9 @@ import flow.Layout;
 import flow.Path;
 import mortar.ViewPresenter;
 
-@Layout(R.layout.friend_view) @WithModule(FriendScreen.Module.class)
+import static com.example.mortar.core.MortarDemoApplication.AppComponent;
+
+@Layout(R.layout.friend_view) @WithComponent(FriendScreen.Component.class)
 public class FriendScreen extends Path implements HasParent {
   private final int index;
 
@@ -45,14 +46,20 @@ public class FriendScreen extends Path implements HasParent {
     return new FriendListScreen();
   }
 
-  @dagger.Module(injects = FriendView.class, addsTo = RootModule.class)
+  @ScreenScope
+  @dagger.Component(dependencies = AppComponent.class, modules = Module.class)
+  public interface Component {
+    void inject(FriendView view);
+  }
+
+  @dagger.Module
   public class Module {
     @Provides User provideFriend(Chats chats) {
       return chats.getFriend(index);
     }
   }
 
-  @Singleton
+  @ScreenScope
   public static class Presenter extends ViewPresenter<FriendView> {
     private final User friend;
 

@@ -19,10 +19,9 @@ import com.example.mortar.android.ActionBarOwner;
 import com.example.mortar.flow.GsonParceler;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.QuoteService;
+import com.example.mortar.mortarscreen.ApplicationScope;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -35,18 +34,18 @@ import retrofit.converter.GsonConverter;
  */
 @Module(
     includes = { ActionBarOwner.ActionBarModule.class, Chats.Module.class },
-    injects = com.example.mortar.core.MortarDemoActivity.class,
+    complete = false,
     library = true)
 public class RootModule {
-  @Provides @Singleton Gson provideGson() {
+  @Provides @ApplicationScope Gson provideGson() {
     return new GsonBuilder().create();
   }
 
-  @Provides @Singleton Parceler provideParcer(Gson gson) {
+  @Provides @ApplicationScope Parceler provideParcer(Gson gson) {
     return new GsonParceler(gson);
   }
 
-  @Provides @Singleton QuoteService provideQuoteService() {
+  @Provides @ApplicationScope QuoteService provideQuoteService() {
     RestAdapter restAdapter =
         new RestAdapter.Builder().setEndpoint("http://www.iheartquotes.com/api/v1/")
             .setConverter(new GsonConverter(new Gson()))

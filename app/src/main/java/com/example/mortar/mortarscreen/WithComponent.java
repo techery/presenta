@@ -9,11 +9,11 @@ import mortar.MortarScope;
 /**
  * Marks a screen as defining a {@link MortarScope}, with the class of a Dagger module
  * to instantiate via reflection. The module must be a static type with a default
- * constructor. For more flexibility, use {@link WithModuleFactory}.
+ * constructor. For more flexibility, use {@link WithComponentFactory}.
  *
  * @see ScreenScoper
  */
 @Target(ElementType.TYPE) @Retention(RetentionPolicy.RUNTIME)
-public @interface WithModule {
+public @interface WithComponent {
   Class<?> value();
 }

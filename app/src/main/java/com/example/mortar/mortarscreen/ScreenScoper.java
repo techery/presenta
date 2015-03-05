@@ -1,166 +1,128 @@
 package com.example.mortar.mortarscreen;
 
 import android.content.Context;
-import android.content.res.Resources;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import dagger.Module;
+import flow.Path;
 import mortar.MortarScope;
-import mortar.dagger1support.ObjectGraphService;
+import mortar.dagger2support.DaggerService;
 
 import static java.lang.String.format;
 
 /**
- * Creates {@link MortarScope}s for screens that may be annotated with {@link WithModuleFactory},
- * {@link WithModule}.
+ * Creates {@link MortarScope}s for screens that may be annotated with {@link WithComponentFactory},
+ * {@link WithComponent}.
  */
 public class ScreenScoper {
-  private static final ModuleFactory NO_FACTORY = new ModuleFactory() {
-    @Override protected Object createDaggerModule(Resources resources, Object screen) {
+
+  private static final ComponentFactory NO_FACTORY = new ComponentFactory() {
+    @Override protected Object createDaggerComponent(Context context, Object screen) {
       throw new UnsupportedOperationException();
     }
   };
 
-  private final Map<Class, ModuleFactory> moduleFactoryCache = new LinkedHashMap<>();
+  private final Map<Class, ComponentFactory> componentFactoryCache = new LinkedHashMap<>();
 
   public MortarScope getScreenScope(Context context, String name, Object screen) {
     MortarScope parentScope = MortarScope.getScope(context);
-    return getScreenScope(context.getResources(), parentScope, name, screen);
+    return getScreenScope(context, parentScope, name, screen);
   }
 
   /**
    * Finds or creates the scope for the given screen, honoring its optional {@link
-   * WithModuleFactory} or {@link WithModule} annotation. Note that scopes are also created
+   * WithComponentFactory} or {@link WithComponent} annotation. Note that scopes are also created
    * for unannotated screens.
    */
-  public MortarScope getScreenScope(Resources resources, MortarScope parentScope, final String name,
-      final Object screen) {
-    ModuleFactory moduleFactory = getModuleFactory(screen);
-    Object childModule;
-    if (moduleFactory != NO_FACTORY) {
-      childModule = moduleFactory.createDaggerModule(resources, screen);
+  public MortarScope getScreenScope(Context context, MortarScope parentScope, final String name, final Object screen) {
+    MortarScope childScope = parentScope.findChild(name);
+    if (childScope != null) return childScope;
+
+    ComponentFactory componentFactory = getComponentFactory(screen);
+    Object childComponent;
+    if (componentFactory != NO_FACTORY) {
+      childComponent = componentFactory.createDaggerComponent(context, screen);
     } else {
       // We need every screen to have a scope, so that anything it injects is scoped.  We need
       // this even if the screen doesn't declare a module, because Dagger allows injection of
       // objects that are annotated even if they don't appear in a module.
-      childModule = null;
+      childComponent = null;
     }
 
-    MortarScope childScope = parentScope.findChild(name);
-    if (childScope == null) {
-      childScope = parentScope.buildChild(name)
-          .withService(ObjectGraphService.SERVICE_NAME,
-              ObjectGraphService.create(parentScope, childModule))
-          .build();
-    }
+    childScope = parentScope
+        .buildChild(name)
+        .withService(DaggerService.SERVICE_NAME, childComponent)
+        .build();
 
     return childScope;
   }
 
-  private ModuleFactory getModuleFactory(Object screen) {
+  private ComponentFactory getComponentFactory(Object screen) {
     Class<?> screenType = screen.getClass();
-    ModuleFactory moduleFactory = moduleFactoryCache.get(screenType);
+    ComponentFactory componentFactory = componentFactoryCache.get(screenType);
+    if (componentFactory != null) return componentFactory;
 
-    if (moduleFactory != null) return moduleFactory;
-
-    WithModule withModule = screenType.getAnnotation(WithModule.class);
-    if (withModule != null) {
-      Class<?> moduleClass = withModule.value();
-
-      Constructor<?>[] constructors = moduleClass.getDeclaredConstructors();
-
-      if (constructors.length != 1) {
-        throw new IllegalArgumentException(
-            format("Module %s for screen %s should have exactly one public constructor",
-                moduleClass.getName(), screen));
-      }
-
-      Constructor constructor = constructors[0];
-
-      Class[] parameters = constructor.getParameterTypes();
-
-      if (parameters.length > 1) {
-        throw new IllegalArgumentException(
-            format("Module %s for screen %s should have 0 or 1 parameter", moduleClass.getName(),
-                screen));
-      }
-
-      Class screenParameter;
-      if (parameters.length == 1) {
-        screenParameter = parameters[0];
-        if (!screenParameter.isInstance(screen)) {
-          throw new IllegalArgumentException(format("Module %s for screen %s should have a "
-                  + "constructor parameter that is a super class of %s", moduleClass.getName(),
-              screen, screen.getClass().getName()));
-        }
-      } else {
-        screenParameter = null;
-      }
-
-      try {
-        if (screenParameter == null) {
-          moduleFactory = new NoArgsFactory(constructor);
-        } else {
-          moduleFactory = new SingleArgFactory(constructor);
-        }
-      } catch (Exception e) {
-        throw new RuntimeException(
-            format("Failed to instantiate module %s for screen %s", moduleClass.getName(), screen),
-            e);
-      }
+    WithComponent withComponent = screenType.getAnnotation(WithComponent.class);
+    if (withComponent != null) {
+      Class<?> componentClass = withComponent.value();
+      componentFactory = new SimpleComponentFactory(componentClass);
     }
 
-    if (moduleFactory == null) {
-      WithModuleFactory withModuleFactory = screenType.getAnnotation(WithModuleFactory.class);
-      if (withModuleFactory != null) {
-        Class<? extends ModuleFactory> mfClass = withModuleFactory.value();
+    if (componentFactory == null) {
+      WithComponentFactory withComponentFactory = screenType.getAnnotation(WithComponentFactory.class);
+      if (withComponentFactory != null) {
+        Class<? extends ComponentFactory> mfClass = withComponentFactory.value();
 
         try {
-          moduleFactory = mfClass.newInstance();
+          componentFactory = mfClass.newInstance();
         } catch (Exception e) {
           throw new RuntimeException(format("Failed to instantiate module factory %s for screen %s",
-              withModuleFactory.value().getName(), screen), e);
+              withComponentFactory.value().getName(), screen), e);
         }
       }
     }
 
-    if (moduleFactory == null) moduleFactory = NO_FACTORY;
+    if (componentFactory == null) componentFactory = NO_FACTORY;
 
-    moduleFactoryCache.put(screenType, moduleFactory);
+    componentFactoryCache.put(screenType, componentFactory);
 
-    return moduleFactory;
+    return componentFactory;
   }
 
-  private static class NoArgsFactory extends ModuleFactory<Object> {
-    final Constructor moduleConstructor;
+  private static class SimpleComponentFactory extends ComponentFactory<Path> {
+    private final Class compClass;
 
-    private NoArgsFactory(Constructor moduleConstructor) {
-      this.moduleConstructor = moduleConstructor;
+    private SimpleComponentFactory(Class compClass) {
+      this.compClass = compClass;
     }
 
-    @Override protected Object createDaggerModule(Resources resources, Object ignored) {
-      try {
-        return moduleConstructor.newInstance();
-      } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-        throw new RuntimeException(e);
+    @Override protected Object createDaggerComponent(Context context, Path screen) {
+      Object depComponent = DaggerService.getDaggerComponent(context);
+      Object depModule = null;
+      // Find and instantiate inner module if any
+      for (Class innerClass : screen.getClass().getClasses()) {
+        if (Modifier.isStatic(screen.getClass().getDeclaredClasses()[1].getModifiers())) continue;
+        if (innerClass.getAnnotation(Module.class) != null) {
+          try {
+            Constructor constructor = innerClass.getDeclaredConstructor(screen.getClass());
+            depModule = constructor.newInstance(screen);
+          } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+          }
+          break;
+        }
+      }
+      if (depModule == null) {
+        return DaggerService.createComponent(compClass, depComponent);
+      } else {
+        return DaggerService.createComponent(compClass, depComponent, depModule);
       }
     }
   }
 
-  private static class SingleArgFactory extends ModuleFactory {
-    final Constructor moduleConstructor;
-
-    public SingleArgFactory(Constructor moduleConstructor) {
-      this.moduleConstructor = moduleConstructor;
-    }
-
-    @Override protected Object createDaggerModule(Resources resources, Object screen) {
-      try {
-        return moduleConstructor.newInstance(screen);
-      } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-        throw new RuntimeException(e);
-      }
-    }
-  }
 }

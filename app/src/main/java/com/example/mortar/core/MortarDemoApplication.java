@@ -17,21 +17,42 @@ package com.example.mortar.core;
 
 import android.app.Application;
 
-import dagger.ObjectGraph;
+import com.example.mortar.android.ActionBarOwner;
+import com.example.mortar.model.Chats;
+import com.example.mortar.mortarscreen.ApplicationScope;
+
+import dagger.Component;
 import mortar.MortarScope;
-import mortar.dagger1support.ObjectGraphService;
+import mortar.dagger2support.DaggerService;
 
 public class MortarDemoApplication extends Application {
+
+  @ApplicationScope
+  @Component(modules =  RootModule.class)
+  public interface AppComponent {
+    void inject(MortarDemoApplication application);
+    ActionBarOwner actionBarOwner();
+    Chats chats();
+  }
 
   private MortarScope rootScope;
 
   @Override public void onCreate() {
     super.onCreate();
+    instance = this;
 
+    AppComponent component = DaggerService.createComponent(AppComponent.class);
     rootScope = MortarScope.buildRootScope()
-        .withService(ObjectGraphService.SERVICE_NAME, ObjectGraph.create(new RootModule()))
+        .withService(DaggerService.SERVICE_NAME, component)
         .build();
+    component.inject(this);
   }
+
+  public static MortarDemoApplication instance() {
+    return instance;
+  }
+
+  private static MortarDemoApplication instance;
 
   @Override public Object getSystemService(String name) {
     Object mortarService = rootScope.getService(name);

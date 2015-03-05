@@ -29,7 +29,9 @@ import com.example.mortar.screen.ChatScreen;
 
 import javax.inject.Inject;
 
-import mortar.dagger1support.ObjectGraphService;
+import mortar.dagger2support.DaggerService;
+
+import static com.example.mortar.screen.ChatScreen.Component;
 
 public class ChatView extends ListView {
   @Inject ChatScreen.Presenter presenter;
@@ -38,7 +40,7 @@ public class ChatView extends ListView {
 
   public ChatView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    ObjectGraphService.inject(context, this);
+    DaggerService.<Component>getDaggerComponent(context).inject(this);
     confirmerPopup = new ConfirmerPopup(context);
 
     setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);

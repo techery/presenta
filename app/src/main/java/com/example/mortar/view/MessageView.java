@@ -21,10 +21,15 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import mortar.dagger1support.ObjectGraphService;
+
 import com.example.mortar.R;
 import com.example.mortar.screen.MessageScreen;
+
 import javax.inject.Inject;
+
+import mortar.dagger2support.DaggerService;
+
+import static com.example.mortar.screen.MessageScreen.Component;
 
 public class MessageView extends LinearLayout {
   @Inject MessageScreen.Presenter presenter;
@@ -35,7 +40,7 @@ public class MessageView extends LinearLayout {
   public MessageView(Context context, AttributeSet attrs) {
     super(context, attrs);
     setOrientation(VERTICAL);
-    ObjectGraphService.inject(context, this);
+    DaggerService.<Component>getDaggerComponent(context).inject(this);
   }
 
   @Override protected void onFinishInflate() {

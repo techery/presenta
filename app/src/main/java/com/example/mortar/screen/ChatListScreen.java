@@ -16,32 +16,47 @@
 package com.example.mortar.screen;
 
 import android.os.Bundle;
+
 import com.example.mortar.R;
-import com.example.mortar.core.RootModule;
+import com.example.mortar.core.MortarDemoApplication;
 import com.example.mortar.model.Chat;
 import com.example.mortar.model.Chats;
-import com.example.mortar.mortarscreen.WithModule;
+import com.example.mortar.mortarscreen.ScreenScope;
+import com.example.mortar.mortarscreen.WithComponent;
 import com.example.mortar.view.ChatListView;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import dagger.Provides;
 import flow.Flow;
 import flow.Layout;
 import flow.Path;
-import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import mortar.ViewPresenter;
 
-@Layout(R.layout.chat_list_view) @WithModule(ChatListScreen.Module.class)
+import static com.example.mortar.screen.ChatListScreen.Component.Module;
+
+@Layout(R.layout.chat_list_view) @WithComponent(ChatListScreen.Component.class)
 public class ChatListScreen extends Path {
 
-  @dagger.Module(injects = ChatListView.class, addsTo = RootModule.class)
-  public static class Module {
-    @Provides List<Chat> provideConversations(Chats chats) {
-      return chats.getAll();
+  @ScreenScope
+  @dagger.Component(dependencies = MortarDemoApplication.AppComponent.class, modules = Module.class)
+  public interface Component {
+
+    void inject(ChatListView view);
+
+    @dagger.Module(library = true, complete = false)
+    public static class Module {
+      @Provides
+      @ScreenScope List<Chat> provideConversations(Chats chats) {
+        return chats.getAll();
+      }
     }
+
   }
 
-  @Singleton
+  @ScreenScope
   public static class Presenter extends ViewPresenter<ChatListView> {
     private final List<Chat> chats;
 
