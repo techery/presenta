@@ -1,0 +1,58 @@
+# svn
+*.svn*
+
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated GUI files
+*/R.java
+
+# generated folder
+bin
+gen
+
+# local
+local.properties
+proguard.cfg
+
+# log files
+log*.txt
+
+# archives
+*.gz
+*.tar
+*.zip
+
+# eclipse
+*.metadata
+*.settings
+
+# Android Studio
+.idea/*
+**/*/.idea
+!.idea/codeStyleSettings.xml
+.gradle
+*/local.properties
+*/out
+build
+*.iml
+*.iws
+*.ipr
+*~
+*.swp
+atlassian-ide-plugin.xml
+
+# Singing & Keys
+signing
+
+# Publishing
+play
+
+.DS_Store
