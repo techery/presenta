@@ -140,3 +140,7 @@ dependencies {
 }
 ```
 [![Analytics](https://ga-beacon.appspot.com/UA-60536876-1/presenta/readme?pixel)](https://github.com/igrigorik/ga-beacon)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/techery/presenta/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
