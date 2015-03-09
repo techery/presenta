@@ -1,12 +1,12 @@
 ## What's this for?
 Mortar and flow together provide a good way to follow MVP pattern and get rid of [lol-cycle with Fragments uglyness](https://corner.squareup.com/2014/10/advocating-against-android-fragments.html).
-Nevertheless it's a little boilerplate to create a single Screen:
+Nevertheless it adds some boilerplate to create a single Screen:
 
 1. Create `Path` class;
 2. Create inner-class `@module` (for Dagger 1) or `@component` + `@module` (for Dagger 2) to provide view with presenter;
 3. Inject `Presenter` into the `View`.
 
-`Mortar` already gives easy way to provide view with presenter via scoped context, and step 2 is odd in most cases – that's what `Presenta` for. `Presenta` uses basic `mortar + flow` example with extra extra notation to skip `Dagger` in the middle of `preseter-view` injection.
+`Mortar` already gives a way to provide view with presenter via scoped context, and step 2 is odd in most cases – that's what `Presenta` for. `Presenta` uses basic `mortar + flow` example with extra extra annotation to skip `Dagger` in the middle of `preseter-view` injection.
 
 ## Getting started
 *Workflow is identical to mortar-sapmle:*
@@ -123,8 +123,9 @@ public class FriendScreen extends Path implements HasParent {
 ## Additions
 Mortar-flow sample has useful PathContainers to show up working example of it's philisophy. Those containers and view helpers are reused in `library-additions`
 ## Dev. status
-Experimental but already is trying to use in prod. builds.
-## Instalation
+Experimental, trying to use in prod. build.
+## Installation
+Use jitpack.io
 ```groovy
 repositories {
     jcenter()
@@ -133,8 +134,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.techery:presenta.library'
-    compile 'com.github.techery:presenta.library-additions'
+    compile 'com.github.techery:presenta.library:0.1.0'
+    compile 'com.github.techery:presenta.library-additions:0.1.0'
     ...
 }
 ```
