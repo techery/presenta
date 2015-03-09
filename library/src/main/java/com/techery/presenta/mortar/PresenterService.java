@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.techery.presenta.mortarscreen.presenter.InjectablePresenter;
 
-
+/**
+ * Mortar service to find an {@link InjectablePresenter} for a context scope.
+ */
 public class PresenterService {
   public static final String SERVICE_NAME = "base_presenter";
 

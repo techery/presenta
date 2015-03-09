@@ -18,6 +18,11 @@ import mortar.dagger2support.DaggerService;
 
 import static java.lang.String.format;
 
+/**
+ * Provides factory for {@link InjectablePresenter} based on path's {@link WithPresenter} annotation.
+ * @see InjectablePresenterFactory
+ * @see SimplePresenterFactory
+ */
 public class PresenterServiceFactoryProvider implements ServiceFactoryProvider<Path> {
 
   private final Map<Class, ServiceFactory> presenterFactoryCache = new LinkedHashMap<>();

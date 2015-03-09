@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * to instantiate via reflection. The module must be a static type with a default
  * constructor. For more flexibility, use {@link WithComponentFactory}.
  *
- * @see com.techery.presenta.mortarscreen.ScreenScoper
+ * @see ComponentServiceFactoryProvider
  */
 @Target(ElementType.TYPE) @Retention(RetentionPolicy.RUNTIME)
 public @interface WithComponent {

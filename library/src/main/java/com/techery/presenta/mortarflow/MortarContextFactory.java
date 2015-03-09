@@ -10,6 +10,10 @@ import flow.Path;
 import flow.PathContextFactory;
 import mortar.MortarScope;
 
+/**
+ * Flow context factory to link mortar {@link MortarScope}s with {@link Path}.
+ * See {@link ScreenScoper} for more details.
+ */
 public final class MortarContextFactory implements PathContextFactory {
   private final ScreenScoper screenScoper;
 

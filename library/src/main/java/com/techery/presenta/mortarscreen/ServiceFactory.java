@@ -4,11 +4,15 @@ import android.content.Context;
 
 import flow.Path;
 
+/**
+ * Provides some Service to be used for mortar scope depending on T object.
+ * @param <T> usually {@link Path}
+ */
 public interface ServiceFactory<T> {
 
   public Object getService(Context context, T screen);
 
-  static final ServiceFactory NO_FACTORY = new ServiceFactory() {
+  public static final ServiceFactory NO_FACTORY = new ServiceFactory() {
     @Override
     public Object getService(Context context, Object screen) {
       throw new UnsupportedOperationException();

@@ -15,6 +15,11 @@ import dagger.Module;
 import flow.Path;
 import mortar.dagger2support.DaggerService;
 
+/**
+ * Provides factory for Dagger's component based on path's {@link WithComponent} annotation.
+ * Component is able to be dependant on another module within parent context.
+ * @see SimpleComponentFactory
+ */
 public class ComponentServiceFactoryProvider implements ServiceFactoryProvider<Path> {
 
   private final Map<Class, ServiceFactory> componentFactoryCache = new LinkedHashMap<>();
