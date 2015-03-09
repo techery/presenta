@@ -2,7 +2,7 @@ package com.techery.presenta.mortar;
 
 import android.content.Context;
 
-import com.techery.presenta.mortarscreen.InjectablePresenter;
+import com.techery.presenta.mortarscreen.presenter.InjectablePresenter;
 
 
 public class PresenterService {

@@ -1,4 +1,4 @@
-package com.techery.presenta.mortarscreen;
+package com.techery.presenta.mortarscreen.presenter;
 
 import android.view.View;
 

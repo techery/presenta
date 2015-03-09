@@ -25,8 +25,8 @@ import com.example.mortar.model.Message;
 import com.example.mortar.view.ChatView;
 import com.example.mortar.view.Confirmation;
 import com.techery.addition.ActionBarOwner;
-import com.techery.presenta.mortarscreen.InjectablePresenter;
-import com.techery.presenta.mortarscreen.WithPresenter;
+import com.techery.presenta.mortarscreen.presenter.InjectablePresenter;
+import com.techery.presenta.mortarscreen.presenter.WithPresenter;
 
 import javax.inject.Inject;
 
@@ -37,7 +37,6 @@ import flow.Path;
 import mortar.PopupPresenter;
 import rx.Observer;
 import rx.Subscription;
-import rx.functions.Action0;
 import rx.subscriptions.Subscriptions;
 
 @Layout(R.layout.chat_view) @WithPresenter(ChatScreen.Presenter.class)

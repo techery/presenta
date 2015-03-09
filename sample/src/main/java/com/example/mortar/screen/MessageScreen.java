@@ -21,8 +21,8 @@ import com.example.mortar.R;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.Message;
 import com.example.mortar.view.MessageView;
-import com.techery.presenta.mortarscreen.InjectablePresenter;
-import com.techery.presenta.mortarscreen.WithPresenter;
+import com.techery.presenta.mortarscreen.presenter.InjectablePresenter;
+import com.techery.presenta.mortarscreen.presenter.WithPresenter;
 
 import javax.inject.Inject;
 

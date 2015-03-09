@@ -21,8 +21,8 @@ import com.example.mortar.R;
 import com.example.mortar.model.Chats;
 import com.example.mortar.model.User;
 import com.example.mortar.view.FriendListView;
-import com.techery.presenta.mortarscreen.InjectablePresenter;
-import com.techery.presenta.mortarscreen.WithPresenter;
+import com.techery.presenta.mortarscreen.presenter.InjectablePresenter;
+import com.techery.presenta.mortarscreen.presenter.WithPresenter;
 
 import java.util.List;
 
