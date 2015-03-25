@@ -209,6 +209,7 @@ public class MortarDemoActivity extends ActionBarActivity
   @Override
   protected void onDestroy() {
     actionBarOwner.dropView(this);
+    actionBarOwner.setConfig(null);
 
     // activityScope may be null in case isWrongInstance() returned true in onCreate()
     if (isFinishing() && activityScope != null) {

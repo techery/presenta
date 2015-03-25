@@ -58,8 +58,7 @@ public class ChatScreen extends Path implements HasParent {
 
   public class Presenter extends InjectablePresenter<ChatView> {
     @Inject Chats chats;
-    @Inject
-    ActionBarOwner actionBar;
+    @Inject ActionBarOwner actionBar;
     private final Chat chat;
     private final PopupPresenter<Confirmation, Boolean> confirmer;
     private Subscription running = Subscriptions.empty();
