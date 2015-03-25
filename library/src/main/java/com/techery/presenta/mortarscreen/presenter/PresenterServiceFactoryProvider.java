@@ -78,7 +78,13 @@ public class PresenterServiceFactoryProvider implements ServiceFactoryProvider<P
           constructor = serviceClass.getDeclaredConstructor(screen.getClass());
           return constructor.newInstance(screen);
         }
-      } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+      } catch (IllegalAccessException e) {
+        e.printStackTrace();
+      } catch (NoSuchMethodException e) {
+        e.printStackTrace();
+      } catch (InstantiationException e) {
+        e.printStackTrace();
+      } catch (InvocationTargetException e) {
         e.printStackTrace();
       }
       return null;
@@ -104,7 +110,13 @@ public class PresenterServiceFactoryProvider implements ServiceFactoryProvider<P
           constructor = serviceClass.getDeclaredConstructor(screen.getClass(), InjectablePresenter.PresenterInjector.class);
           return constructor.newInstance(screen, injector);
         }
-      } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+      } catch (IllegalAccessException e) {
+        e.printStackTrace();
+      } catch (NoSuchMethodException e) {
+        e.printStackTrace();
+      } catch (InstantiationException e) {
+        e.printStackTrace();
+      } catch (InvocationTargetException e) {
         e.printStackTrace();
       }
       return null;
@@ -126,7 +138,9 @@ public class PresenterServiceFactoryProvider implements ServiceFactoryProvider<P
         try {
           Method injectableMethod = findInjectableMethod();
           injectableMethod.invoke(screenComponent, presenter);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
+          e.printStackTrace();
+        } catch (InvocationTargetException e) {
           e.printStackTrace();
         } catch (NoSuchMethodException | NullPointerException e) {
           String detailMessage = "No graph method found to inject " + presenterClass.getSimpleName() + ". Check your component";

@@ -32,21 +32,21 @@ public class ScreenScoper {
     MortarScope childScope = parentScope.findChild(name);
     if (childScope != null) return childScope;
 
-    MortarScope.Builder builder = parentScope.buildChild(name);
+    MortarScope.Builder builder = parentScope.buildChild();
 
     ServiceFactory serviceFactory;
     serviceFactory = presenterServiceFactory.getServiceFactory(path);
     if (serviceFactory != null) {
       Object presenter = serviceFactory.getService(context, path);
-      return builder.withService(PresenterService.SERVICE_NAME, presenter).build();
+      return builder.withService(PresenterService.SERVICE_NAME, presenter).build(name);
     }
     serviceFactory = componentServiceFactory.getServiceFactory(path);
     if (serviceFactory != null) {
       Object component = serviceFactory.getService(context, path);
-      return builder.withService(DaggerService.SERVICE_NAME, component).build();
+      return builder.withService(DaggerService.SERVICE_NAME, component).build(name);
     }
     Log.w(TAG, "Path " + path + " has no additional service in mortar context");
-    return builder.build();
+    return builder.build(name);
 
   }
 

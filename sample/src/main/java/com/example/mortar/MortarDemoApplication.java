@@ -45,7 +45,7 @@ public class MortarDemoApplication extends Application {
     AppComponent component = DaggerService.createComponent(AppComponent.class);
     rootScope = MortarScope.buildRootScope()
         .withService(DaggerService.SERVICE_NAME, component)
-        .build();
+        .build("root");
     component.inject(this);
   }
 

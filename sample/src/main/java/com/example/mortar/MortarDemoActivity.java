@@ -104,19 +104,19 @@ public class MortarDemoActivity extends ActionBarActivity
     ActivityFlowSupport.NonConfigurationInstance nonConfigurationInstance = (ActivityFlowSupport.NonConfigurationInstance) getLastCustomNonConfigurationInstance();
     Backstack backstack = Backstack.single(new ChatListScreen());
     flowSupport = ActivityFlowSupport.onCreate(nonConfigurationInstance, savedInstanceState, new GsonParceler(new Gson()), backstack);
-    MortarScope parentScope = MortarScope.getScope(getApplication());
 
     Object appComponent = DaggerService.getDaggerComponent(MortarDemoApplication.instance());
     Component component = DaggerService.createComponent(Component.class, appComponent);
     component.inject(this);
 
     String scopeName = getLocalClassName() + "-task-" + getTaskId();
+    MortarScope parentScope = MortarScope.getScope(getApplication());
     activityScope = parentScope.findChild(scopeName);
     if (activityScope == null) {
-      activityScope = parentScope.buildChild(scopeName)
+      activityScope = parentScope.buildChild()
           .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
           .withService(DaggerService.SERVICE_NAME, component)
-          .build();
+          .build(scopeName);
     }
     BundleServiceRunner.getBundleServiceRunner(activityScope).onCreate(savedInstanceState);
 
