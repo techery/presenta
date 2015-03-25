@@ -47,7 +47,6 @@ build
 *.ipr
 *~
 *.swp
-atlassian-ide-plugin.xml
 
 # Singing & Keys
 signing
