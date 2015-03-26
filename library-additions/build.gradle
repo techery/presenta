@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'android-maven'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     compile project(':library')
-    compile 'com.google.code.gson:gson:2.3.1'
+    provided 'com.google.code.gson:gson:2.3.1'
 }
 
 // build a jar with source files

@@ -30,23 +30,25 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:appcompat-v7:22.0.0'
 
     compile project(':library')
     compile project(':library-additions')
 
     compile 'io.reactivex:rxandroid:0.24.0'
 
-    compile 'com.squareup.okhttp:okhttp:2.2.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
-    compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.squareup.okhttp:okhttp:2.3.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+
+    compile 'com.google.code.gson:gson:2.3.1'
 
     compile 'com.google.dagger:dagger:2.0-SNAPSHOT'
     apt 'com.google.dagger:dagger-compiler:2.0-SNAPSHOT'
     provided 'org.glassfish:javax.annotation:10.0-b28'
     
-    compile 'com.jakewharton:butterknife:6.0.0'
+    compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.jakewharton.timber:timber:2.7.1'
 
     compile 'com.etsy.android.grid:library:1.0.3'
