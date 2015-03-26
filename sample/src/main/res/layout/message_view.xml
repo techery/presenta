@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<com.example.mortar.view.MessageView
+<com.example.presenta.view.MessageView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -36,4 +36,4 @@
       android:padding="16dp"
       />
 
-</com.example.mortar.view.MessageView>
+</com.example.presenta.view.MessageView>

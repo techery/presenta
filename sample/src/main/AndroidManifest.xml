@@ -16,7 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mortar"
+    package="com.example.presenta"
     >
 
   <uses-permission android:name="android.permission.INTERNET"/>
@@ -24,12 +24,12 @@
   <application
       android:label="Mortar"
       android:icon="@drawable/mortar_icon"
-      android:name=".MortarDemoApplication"
+      android:name="com.example.presenta.MortarDemoApplication"
       android:allowBackup="true"
       >
     <activity
         android:launchMode="singleInstance"
-        android:name=".MortarDemoActivity"
+        android:name="com.example.presenta.MortarDemoActivity"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         >
       <intent-filter>
