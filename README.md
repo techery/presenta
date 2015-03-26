@@ -127,6 +127,19 @@ Experimental, trying to use in prod. build.
 ## Installation
 Use jitpack.io
 ```groovy
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.3'
+        classpath 'com.github.dcendents:android-maven-plugin:1.2'
+    }
+}
+...
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+...
 repositories {
     jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
@@ -134,9 +147,14 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.techery:presenta.library:0.1.0'
-    compile 'com.github.techery:presenta.library-additions:0.1.0'
+    compile 'com.github.techery.presenta:library:{version}'
+    compile 'com.github.techery.presenta:library-additions:{version}'
     ...
+    compile 'com.google.dagger:dagger:2.0-SNAPSHOT'
+    apt 'com.google.dagger:dagger-compiler:2.0-SNAPSHOT'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+    ...
+    compile 'com.google.code.gson:gson:2.3.1'
 }
 ```
 [![Analytics](https://ga-beacon.appspot.com/UA-60536876-1/presenta/readme?pixel)](https://github.com/igrigorik/ga-beacon)
