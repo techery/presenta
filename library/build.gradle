@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.squareup.flow:flow:0.9-SNAPSHOT'
+    compile 'com.github.almozavr:flow:8d5d023a34c334ce03d95104434cfc7e0b255823'
     compile 'com.squareup.mortar:mortar:0.17-SNAPSHOT'
     provided 'com.google.dagger:dagger:2.0'
     provided 'com.google.dagger:dagger-compiler:2.0'
