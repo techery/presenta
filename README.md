@@ -9,13 +9,13 @@ Nevertheless it adds some boilerplate to create a single Screen:
 `Mortar` already gives a way to provide view with presenter via scoped context, and step 2 is odd in most cases – that's what `Presenta` for. `Presenta` uses basic `mortar + flow` example with extra extra annotation to skip `Dagger` in the middle of `preseter-view` injection.
 
 ## Getting started
-*Workflow is identical to mortar-sapmle:*
+*Workflow is identical to mortar-sample:*
 
-1. Add root scope for mortar, optionally link it with your dagger main component;
-2. Add flow support to main activity;
+1. Add root scope for Mortar, optionally link it with your Dagger main component;
+2. Add Flow support to main activity;
 3. Create Path screen with presenter and view refs.
 
-Presenta provides `InjectablePresenter` as a base class for presenters which want to benefit from dagger and mortar, so you have dagger injections available inside presenter with no hassle.
+Presenta provides `InjectablePresenter` as a base class for presenters which want to benefit from Dagger and Mortar, so you have Dagger injections available inside presenter with no hassle.
 
 #### 1. Declare your `Path` using `@WithPresenter`
 ```java
@@ -38,7 +38,7 @@ public static class Presenter extends InjectablePresenter<ChatListView> {
     
   }
 ```
-#### 3. Use mortar service to get presenter from View
+#### 3. Use Mortar service to get presenter from View
 ```java
 public class ChatListView extends ListView {
   Presenter presenter;
