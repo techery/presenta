@@ -28,7 +28,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import mortar.dagger2support.DaggerService;
+import io.techery.presenta.mortar.DaggerService;
 
 public class FriendView extends FrameLayout {
 

@@ -6,7 +6,7 @@ import io.techery.presenta.di.ApplicationScope;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(library = true)
+@Module
 public class ActionBarModule {
   @Provides
   @ApplicationScope

@@ -19,12 +19,12 @@ import android.app.Application;
 
 import com.example.presenta.di.RootModule;
 import com.example.presenta.model.Chats;
-import io.techery.presenta.addition.ActionBarOwner;
-import io.techery.presenta.di.ApplicationScope;
 
 import dagger.Component;
+import io.techery.presenta.addition.ActionBarOwner;
+import io.techery.presenta.di.ApplicationScope;
+import io.techery.presenta.mortar.DaggerService;
 import mortar.MortarScope;
-import mortar.dagger2support.DaggerService;
 
 public class MortarDemoApplication extends Application {
 

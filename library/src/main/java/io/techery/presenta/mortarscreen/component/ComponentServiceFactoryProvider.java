@@ -2,9 +2,6 @@ package io.techery.presenta.mortarscreen.component;
 
 import android.content.Context;
 
-import io.techery.presenta.mortarscreen.ServiceFactory;
-import io.techery.presenta.mortarscreen.ServiceFactoryProvider;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -13,7 +10,9 @@ import java.util.Map;
 
 import dagger.Module;
 import flow.Path;
-import mortar.dagger2support.DaggerService;
+import io.techery.presenta.mortar.DaggerService;
+import io.techery.presenta.mortarscreen.ServiceFactory;
+import io.techery.presenta.mortarscreen.ServiceFactoryProvider;
 
 /**
  * Provides factory for Dagger's component based on path's {@link WithComponent} annotation.

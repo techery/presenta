@@ -27,10 +27,6 @@ import com.example.presenta.di.ScreenComponent;
 import com.example.presenta.screen.ChatListScreen;
 import com.example.presenta.screen.FriendListScreen;
 import com.google.gson.Gson;
-import io.techery.presenta.addition.ActionBarOwner;
-import io.techery.presenta.addition.flow.util.GsonParceler;
-import io.techery.presenta.di.ScreenScope;
-import io.techery.presenta.flow.ActivityFlowSupport;
 
 import javax.inject.Inject;
 
@@ -38,10 +34,14 @@ import flow.Backstack;
 import flow.Flow;
 import flow.Path;
 import flow.PathContainerView;
+import io.techery.presenta.addition.ActionBarOwner;
+import io.techery.presenta.addition.flow.util.GsonParceler;
+import io.techery.presenta.di.ScreenScope;
+import io.techery.presenta.flow.ActivityFlowSupport;
+import io.techery.presenta.mortar.DaggerService;
 import mortar.MortarScope;
 import mortar.MortarScopeDevHelper;
 import mortar.bundler.BundleServiceRunner;
-import mortar.dagger2support.DaggerService;
 
 import static android.view.MenuItem.SHOW_AS_ACTION_ALWAYS;
 import static io.techery.presenta.addition.flow.util.BackSupport.HandlesBack;

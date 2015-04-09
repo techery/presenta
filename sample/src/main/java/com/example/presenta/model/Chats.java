@@ -16,8 +16,6 @@
 package com.example.presenta.model;
 
 
-import io.techery.presenta.di.ApplicationScope;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -26,6 +24,7 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 import dagger.Provides;
+import io.techery.presenta.di.ApplicationScope;
 
 import static java.util.Arrays.asList;
 
@@ -79,7 +78,7 @@ public class Chats {
     return all.get(id);
   }
 
-  @dagger.Module(library = true, complete = false)
+  @dagger.Module
   public static class Module {
 
     @Provides @ApplicationScope Executor provideMessagePollThread() {

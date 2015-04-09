@@ -20,7 +20,9 @@ repositories {
 dependencies {
     compile 'com.squareup.flow:flow:0.9-SNAPSHOT'
     compile 'com.squareup.mortar:mortar:0.17-SNAPSHOT'
-    compile 'com.squareup.mortar:dagger2support:0.17-SNAPSHOT'
+    provided 'com.google.dagger:dagger:2.0'
+    provided 'com.google.dagger:dagger-compiler:2.0'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 }
 
 // build a jar with source files

@@ -2,9 +2,6 @@ package io.techery.presenta.mortarscreen.presenter;
 
 import android.content.Context;
 
-import io.techery.presenta.mortarscreen.ServiceFactory;
-import io.techery.presenta.mortarscreen.ServiceFactoryProvider;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,7 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import flow.Path;
-import mortar.dagger2support.DaggerService;
+import io.techery.presenta.mortar.DaggerService;
+import io.techery.presenta.mortarscreen.ServiceFactory;
+import io.techery.presenta.mortarscreen.ServiceFactoryProvider;
 
 import static java.lang.String.format;
 

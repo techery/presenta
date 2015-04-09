@@ -31,10 +31,7 @@ import retrofit.converter.GsonConverter;
 /**
  * Defines app-wide singletons.
  */
-@Module(
-    includes = { ActionBarModule.class, Chats.Module.class },
-    complete = false,
-    library = true)
+@Module(includes = { ActionBarModule.class, Chats.Module.class })
 public class RootModule {
   @Provides @ApplicationScope
   Gson provideGson() {

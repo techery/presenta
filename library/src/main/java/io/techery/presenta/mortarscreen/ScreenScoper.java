@@ -3,17 +3,16 @@ package io.techery.presenta.mortarscreen;
 import android.content.Context;
 import android.util.Log;
 
+import flow.Path;
+import io.techery.presenta.mortar.DaggerService;
 import io.techery.presenta.mortar.PresenterService;
 import io.techery.presenta.mortarscreen.component.ComponentServiceFactoryProvider;
-import io.techery.presenta.mortarscreen.presenter.PresenterServiceFactoryProvider;
-
-import flow.Path;
 import io.techery.presenta.mortarscreen.component.WithComponent;
 import io.techery.presenta.mortarscreen.component.WithComponentFactory;
+import io.techery.presenta.mortarscreen.presenter.PresenterServiceFactoryProvider;
 import io.techery.presenta.mortarscreen.presenter.WithPresenter;
 import io.techery.presenta.mortarscreen.presenter.WithPresenterFactory;
 import mortar.MortarScope;
-import mortar.dagger2support.DaggerService;
 
 /**
  * Creates {@link MortarScope}s for screens that may be annotated with {@link WithPresenterFactory},
