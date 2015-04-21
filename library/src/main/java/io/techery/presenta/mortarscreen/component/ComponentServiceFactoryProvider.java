@@ -65,7 +65,7 @@ public class ComponentServiceFactoryProvider implements ServiceFactoryProvider<P
       Object depModule = null;
       // Find and instantiate inner module if any
       for (Class innerClass : screen.getClass().getClasses()) {
-        if (Modifier.isStatic(screen.getClass().getDeclaredClasses()[1].getModifiers())) continue;
+        if (Modifier.isStatic(innerClass.getModifiers())) continue;
         if (innerClass.getAnnotation(Module.class) != null) {
           try {
             Constructor constructor = innerClass.getDeclaredConstructor(screen.getClass());
