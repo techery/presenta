@@ -3,7 +3,7 @@ package io.techery.presenta.mortarscreen;
 import android.content.Context;
 import android.util.Log;
 
-import flow.Path;
+import flow.path.Path;
 import io.techery.presenta.mortar.DaggerService;
 import io.techery.presenta.mortar.PresenterService;
 import io.techery.presenta.mortarscreen.component.ComponentServiceFactoryProvider;

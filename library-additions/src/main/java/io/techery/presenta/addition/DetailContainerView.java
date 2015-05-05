@@ -3,8 +3,8 @@ package io.techery.presenta.addition;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import flow.Path;
-import flow.PathContextFactory;
+import flow.path.Path;
+import flow.path.PathContextFactory;
 import io.techery.presenta.addition.flow.container.SimplePathContainer;
 import io.techery.presenta.addition.flow.path.MasterDetailPath;
 

@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import dagger.Module;
-import flow.Path;
+import flow.path.Path;
 import io.techery.presenta.mortar.DaggerService;
 import io.techery.presenta.mortarscreen.ServiceFactory;
 import io.techery.presenta.mortarscreen.ServiceFactoryProvider;
@@ -70,7 +70,13 @@ public class ComponentServiceFactoryProvider implements ServiceFactoryProvider<P
           try {
             Constructor constructor = innerClass.getDeclaredConstructor(screen.getClass());
             depModule = constructor.newInstance(screen);
-          } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+          } catch (IllegalAccessException e) {
+            e.printStackTrace();
+          } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+          } catch (InstantiationException e) {
+            e.printStackTrace();
+          } catch (InvocationTargetException e) {
             e.printStackTrace();
           }
           break;

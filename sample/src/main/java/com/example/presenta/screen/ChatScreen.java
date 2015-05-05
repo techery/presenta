@@ -17,23 +17,20 @@ package com.example.presenta.screen;
 
 import android.os.Bundle;
 import android.util.Log;
-
 import com.example.presenta.R;
 import com.example.presenta.model.Chat;
 import com.example.presenta.model.Chats;
 import com.example.presenta.model.Message;
+import com.example.presenta.flow.HasParent;
 import com.example.presenta.view.ChatView;
 import com.example.presenta.view.Confirmation;
+import flow.Flow;
+import flow.path.Path;
 import io.techery.presenta.addition.ActionBarOwner;
+import io.techery.presenta.addition.flow.path.Layout;
 import io.techery.presenta.mortarscreen.presenter.InjectablePresenter;
 import io.techery.presenta.mortarscreen.presenter.WithPresenter;
-
 import javax.inject.Inject;
-
-import flow.Flow;
-import flow.HasParent;
-import flow.Layout;
-import flow.Path;
 import mortar.PopupPresenter;
 import rx.Observer;
 import rx.Subscription;
@@ -120,7 +117,7 @@ public class ChatScreen extends Path implements HasParent {
     }
 
     public void onConversationSelected(int position) {
-      Flow.get(getView().getContext()).goTo(new MessageScreen(chat.getId(), position));
+      Flow.get(getView().getContext()).set(new MessageScreen(chat.getId(), position));
     }
 
     public void visibilityChanged(boolean visible) {

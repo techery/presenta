@@ -18,7 +18,7 @@ package io.techery.presenta.addition;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import flow.Path;
+import flow.path.Path;
 import io.techery.presenta.addition.flow.container.SimplePathContainer;
 import io.techery.presenta.mortarflow.MortarContextFactory;
 

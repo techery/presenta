@@ -23,22 +23,24 @@ import android.animation.ObjectAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import io.techery.presenta.flow.Utils;
-
 import flow.Flow;
-import flow.Path;
-import flow.PathContainer;
-import flow.PathContext;
-import flow.PathContextFactory;
+import flow.path.Path;
+import flow.path.PathContainer;
+import flow.path.PathContext;
+import flow.path.PathContextFactory;
+import io.techery.presenta.addition.flow.path.Layout;
+import io.techery.presenta.flow.Utils;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static flow.Flow.Direction.REPLACE;
 
 /**
  * Provides basic right-to-left transitions. Saves and restores view state.
- * Uses {@link flow.PathContext} to allow customized sub-containers.
+ * Uses {@link PathContext} to allow customized sub-containers.
  */
 public class SimplePathContainer extends PathContainer {
+  private static final Map<Class, Integer> PATH_LAYOUT_CACHE = new LinkedHashMap<>();
   private final PathContextFactory contextFactory;
 
   public SimplePathContainer(int tagKey, PathContextFactory contextFactory) {
@@ -60,12 +62,11 @@ public class SimplePathContainer extends PathContainer {
 
     Path to = traversalState.toPath();
 
-    ViewGroup newView;
+    View newView;
     context = PathContext.create(oldPath, to, contextFactory);
     int layout = getLayout(to);
-    newView = (ViewGroup) LayoutInflater.from(context)
-        .cloneInContext(context)
-        .inflate(layout, containerView, false);
+    newView =
+        LayoutInflater.from(context).cloneInContext(context).inflate(layout, containerView, false);
 
     View fromView = null;
     if (traversalState.fromPath() != null) {
@@ -83,11 +84,9 @@ public class SimplePathContainer extends PathContainer {
       containerView.addView(newView);
       final View finalFromView = fromView;
       Utils.waitForMeasure(newView, new Utils.OnMeasuredCallback() {
-        @Override
-        public void onMeasured(View view, int width, int height) {
+        @Override public void onMeasured(View view, int width, int height) {
           runAnimation(containerView, finalFromView, view, direction, new Flow.TraversalCallback() {
-            @Override
-            public void onTraversalCompleted() {
+            @Override public void onTraversalCompleted() {
               containerView.removeView(finalFromView);
               oldPath.destroyNotIn(context, contextFactory);
               callback.onTraversalCompleted();
@@ -96,6 +95,22 @@ public class SimplePathContainer extends PathContainer {
         }
       });
     }
+  }
+
+  protected int getLayout(Path path) {
+    Class pathType = path.getClass();
+    Integer layoutResId = PATH_LAYOUT_CACHE.get(pathType);
+    if (layoutResId == null) {
+      Layout layout = (Layout) pathType.getAnnotation(Layout.class);
+      if (layout == null) {
+        throw new IllegalArgumentException(
+            String.format("@%s annotation not found on class %s", Layout.class.getSimpleName(),
+                pathType.getName()));
+      }
+      layoutResId = layout.value();
+      PATH_LAYOUT_CACHE.put(pathType, layoutResId);
+    }
+    return layoutResId;
   }
 
   private void runAnimation(final ViewGroup container, final View from, final View to,

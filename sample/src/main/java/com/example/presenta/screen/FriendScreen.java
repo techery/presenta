@@ -16,21 +16,18 @@
 package com.example.presenta.screen;
 
 import android.os.Bundle;
-
 import com.example.presenta.MortarDemoActivity;
 import com.example.presenta.R;
 import com.example.presenta.model.Chats;
 import com.example.presenta.model.User;
+import com.example.presenta.flow.HasParent;
 import com.example.presenta.view.FriendView;
+import dagger.Provides;
+import flow.path.Path;
+import io.techery.presenta.addition.flow.path.Layout;
 import io.techery.presenta.di.ScreenScope;
 import io.techery.presenta.mortarscreen.component.WithComponent;
-
 import javax.inject.Inject;
-
-import dagger.Provides;
-import flow.HasParent;
-import flow.Layout;
-import flow.Path;
 import mortar.ViewPresenter;
 
 @Layout(R.layout.friend_view) @WithComponent(FriendScreen.Component.class)
