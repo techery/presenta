@@ -1,6 +1,6 @@
 package io.techery.presenta.addition.flow.path;
 
-import flow.Path;
+import flow.path.Path;
 
 /**
  * Identifies screens in a master / detail relationship. Both master and detail screens

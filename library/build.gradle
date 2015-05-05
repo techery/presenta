@@ -18,8 +18,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.almozavr:flow:8d5d023a34c334ce03d95104434cfc7e0b255823'
-    compile 'com.squareup.mortar:mortar:0.17-SNAPSHOT'
+    compile 'com.squareup.flow:flow:0.10'
+    compile 'com.squareup.flow:flow-path:0.10'
+    compile 'com.squareup.mortar:mortar:0.17'
     provided 'com.google.dagger:dagger:2.0'
     provided 'com.google.dagger:dagger-compiler:2.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'

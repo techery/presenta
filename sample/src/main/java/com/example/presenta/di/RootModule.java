@@ -19,12 +19,12 @@ import com.example.presenta.model.Chats;
 import com.example.presenta.model.QuoteService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import flow.StateParceler;
 import io.techery.presenta.addition.flow.util.GsonParceler;
 import io.techery.presenta.di.ApplicationScope;
 
 import dagger.Module;
 import dagger.Provides;
-import flow.Parceler;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -38,7 +38,7 @@ public class RootModule {
     return new GsonBuilder().create();
   }
 
-  @Provides @ApplicationScope Parceler provideParcer(Gson gson) {
+  @Provides @ApplicationScope StateParceler provideParcer(Gson gson) {
     return new GsonParceler(gson);
   }
 

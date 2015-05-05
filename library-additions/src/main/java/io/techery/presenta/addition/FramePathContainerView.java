@@ -23,9 +23,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import flow.Flow;
-import flow.Path;
-import flow.PathContainer;
-import flow.PathContainerView;
+import flow.path.Path;
+import flow.path.PathContainer;
+import flow.path.PathContainerView;
 import io.techery.presenta.addition.flow.container.SimplePathContainer;
 import io.techery.presenta.addition.flow.util.BackSupport;
 
@@ -40,7 +40,7 @@ public class FramePathContainerView extends FrameLayout implements BackSupport.H
   }
 
   /**
-   * Allows subclasses to use custom {@link flow.PathContainer} implementations. Allows the use
+   * Allows subclasses to use custom {@link PathContainer} implementations. Allows the use
    * of more sophisticated transition schemes, and customized context wrappers.
    */
   protected FramePathContainerView(Context context, AttributeSet attrs, PathContainer container) {

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import flow.Path;
+import flow.path.Path;
 import io.techery.presenta.mortar.DaggerService;
 import io.techery.presenta.mortarscreen.ServiceFactory;
 import io.techery.presenta.mortarscreen.ServiceFactoryProvider;

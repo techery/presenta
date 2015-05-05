@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 
+import flow.path.Path;
+import flow.path.PathContextFactory;
 import io.techery.presenta.mortarscreen.ScreenScoper;
-
-import flow.Path;
-import flow.PathContextFactory;
 import mortar.MortarScope;
 
 /**

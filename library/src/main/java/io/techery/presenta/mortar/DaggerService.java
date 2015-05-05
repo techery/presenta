@@ -12,6 +12,7 @@ public class DaggerService {
    */
   @SuppressWarnings("unchecked") //
   public static <T> T getDaggerComponent(Context context) {
+    //noinspection ResourceType
     return (T) context.getSystemService(SERVICE_NAME);
   }
 
@@ -31,7 +32,7 @@ public class DaggerService {
       Class<?> generatedClass = Class.forName(generatedName);
       Object builder = generatedClass.getMethod("builder").invoke(null);
 
-      for (Method method : builder.getClass().getMethods()) {
+      for (Method method : builder.getClass().getDeclaredMethods()) {
         Class<?>[] params = method.getParameterTypes();
         if (params.length == 1) {
           Class<?> dependencyClass = params[0];

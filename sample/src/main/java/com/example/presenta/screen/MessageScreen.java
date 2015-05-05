@@ -16,20 +16,17 @@
 package com.example.presenta.screen;
 
 import android.os.Bundle;
-
 import com.example.presenta.R;
 import com.example.presenta.model.Chats;
 import com.example.presenta.model.Message;
+import com.example.presenta.flow.HasParent;
 import com.example.presenta.view.MessageView;
+import flow.Flow;
+import flow.path.Path;
+import io.techery.presenta.addition.flow.path.Layout;
 import io.techery.presenta.mortarscreen.presenter.InjectablePresenter;
 import io.techery.presenta.mortarscreen.presenter.WithPresenter;
-
 import javax.inject.Inject;
-
-import flow.Flow;
-import flow.HasParent;
-import flow.Layout;
-import flow.Path;
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -76,7 +73,7 @@ public class MessageScreen extends Path implements HasParent {
       if (message == null) return;
       int position = message.from.id;
       if (position != -1) {
-        Flow.get(getView()).goTo(new FriendScreen(position));
+        Flow.get(getView()).set(new FriendScreen(position));
       }
     }
   }

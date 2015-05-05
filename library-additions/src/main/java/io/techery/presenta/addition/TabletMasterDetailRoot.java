@@ -12,8 +12,8 @@ import io.techery.presenta.addition.flow.path.MasterDetailPath;
 import io.techery.presenta.addition.flow.util.BackSupport;
 
 import flow.Flow;
-import flow.Path;
-import flow.PathContainerView;
+import flow.path.Path;
+import flow.path.PathContainerView;
 
 import static io.techery.presenta.addition.flow.util.BackSupport.HandlesBack;
 
@@ -53,7 +53,7 @@ public class TabletMasterDetailRoot extends LinearLayout
     return this;
   }
 
-  @Override public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
+  @Override public void dispatch(final Flow.Traversal traversal, Flow.TraversalCallback callback) {
 
     class CountdownCallback implements Flow.TraversalCallback {
       final Flow.TraversalCallback wrapped;
@@ -68,7 +68,8 @@ public class TabletMasterDetailRoot extends LinearLayout
         if (countDown == 0) {
           disabled = false;
           wrapped.onTraversalCompleted();
-          ((IsMasterView) masterContainer.getCurrentChild()).updateSelection();
+          ((IsMasterView) masterContainer.getCurrentChild()).updateSelection(
+              traversal.destination.<MasterDetailPath>top());
         }
       }
     }

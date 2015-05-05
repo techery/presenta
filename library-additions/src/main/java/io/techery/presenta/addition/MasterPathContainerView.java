@@ -8,8 +8,8 @@ import io.techery.presenta.addition.flow.container.SimplePathContainer;
 import io.techery.presenta.addition.flow.path.MasterDetailPath;
 
 import flow.Flow;
-import flow.Path;
-import flow.PathContextFactory;
+import flow.path.Path;
+import flow.path.PathContextFactory;
 
 public class MasterPathContainerView extends FramePathContainerView {
 
@@ -17,12 +17,12 @@ public class MasterPathContainerView extends FramePathContainerView {
     super(context, attrs, new MasterPathContainer(R.id.mortar_screen_switcher_tag, Path.contextFactory()));
   }
 
-  @Override public void dispatch(Flow.Traversal traversal, final Flow.TraversalCallback callback) {
+  @Override
+  public void dispatch(Flow.Traversal traversal, final Flow.TraversalCallback callback) {
 
-    MasterDetailPath currentMaster =
-        ((MasterDetailPath) Flow.get(getContext()).getBackstack().current()).getMaster();
+    MasterDetailPath currentMaster = ((MasterDetailPath) traversal.origin.top()).getMaster();
 
-    MasterDetailPath newMaster = ((MasterDetailPath) traversal.destination.current()).getMaster();
+    MasterDetailPath newMaster = ((MasterDetailPath) traversal.destination.top()).getMaster();
 
     // Short circuit if the new screen has the same master.
     if (getCurrentChild() != null && newMaster.equals(currentMaster)) {

@@ -2,7 +2,7 @@ package io.techery.presenta.mortarscreen;
 
 import android.content.Context;
 
-import flow.Path;
+import flow.path.Path;
 
 /**
  * Provides some Service to be used for mortar scope depending on T object.

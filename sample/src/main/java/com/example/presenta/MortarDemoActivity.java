@@ -16,29 +16,27 @@
 package com.example.presenta;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.example.presenta.di.ScreenComponent;
 import com.example.presenta.screen.ChatListScreen;
 import com.example.presenta.screen.FriendListScreen;
 import com.google.gson.Gson;
-
-import javax.inject.Inject;
-
-import flow.ActivityFlowSupport;
-import flow.Backstack;
 import flow.Flow;
-import flow.Path;
-import flow.PathContainerView;
+import flow.FlowDelegate;
+import flow.History;
+import flow.path.Path;
+import flow.path.PathContainerView;
 import io.techery.presenta.addition.ActionBarOwner;
 import io.techery.presenta.addition.flow.util.GsonParceler;
 import io.techery.presenta.di.ScreenScope;
 import io.techery.presenta.mortar.DaggerService;
+import javax.inject.Inject;
 import mortar.MortarScope;
 import mortar.MortarScopeDevHelper;
 import mortar.bundler.BundleServiceRunner;
@@ -67,8 +65,8 @@ public class MortarDemoActivity extends ActionBarActivity
   ActionBarOwner actionBarOwner;
 
   private PathContainerView container;
-  private HandlesBack containerAsHandlesBack;
-  private ActivityFlowSupport flowSupport;
+  private HandlesBack containerAsBackTarget;
+  private FlowDelegate flowSupport;
 
   @Override
   public Context getContext() {
@@ -77,14 +75,14 @@ public class MortarDemoActivity extends ActionBarActivity
 
   @Override
   public void dispatch(Flow.Traversal traversal, final Flow.TraversalCallback callback) {
-    Path path = traversal.destination.current();
+    Path path = traversal.destination.top();
     setTitle(path.getClass().getSimpleName());
     boolean canGoBack = traversal.destination.size() > 1;
     String title = path.getClass().getSimpleName();
     ActionBarOwner.MenuAction menu = canGoBack ? null : new ActionBarOwner.MenuAction("Friends", new Runnable() {
           @Override
           public void run() {
-            Flow.get(MortarDemoActivity.this).goTo(new FriendListScreen());
+            Flow.get(MortarDemoActivity.this).set(new FriendListScreen());
           }
         });
     actionBarOwner.setConfig(new ActionBarOwner.Config(false, canGoBack, title, menu));
@@ -100,10 +98,6 @@ public class MortarDemoActivity extends ActionBarActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    ActivityFlowSupport.NonConfigurationInstance nonConfigurationInstance = (ActivityFlowSupport.NonConfigurationInstance) getLastCustomNonConfigurationInstance();
-    Backstack backstack = Backstack.single(new ChatListScreen());
-    flowSupport = ActivityFlowSupport.onCreate(nonConfigurationInstance, savedInstanceState, new GsonParceler(new Gson()), backstack);
 
     Object appComponent = DaggerService.getDaggerComponent(MortarDemoApplication.instance());
     Component component = DaggerService.createComponent(Component.class, appComponent);
@@ -124,13 +118,22 @@ public class MortarDemoActivity extends ActionBarActivity
 
     setContentView(R.layout.root_layout);
     container = (PathContainerView) findViewById(R.id.container);
-    containerAsHandlesBack = (HandlesBack) container;
+    containerAsBackTarget = (HandlesBack) container;
+
+    FlowDelegate.NonConfigurationInstance nonConfig = (FlowDelegate.NonConfigurationInstance) getLastCustomNonConfigurationInstance();
+    History history = History.single(new ChatListScreen());
+    flowSupport = FlowDelegate.onCreate(nonConfig, getIntent(), savedInstanceState, new GsonParceler(new Gson()), history, this);
+  }
+
+  @Override protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    flowSupport.onNewIntent(intent);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    flowSupport.onResume(this);
+    flowSupport.onResume();
   }
 
   @Override
@@ -149,7 +152,7 @@ public class MortarDemoActivity extends ActionBarActivity
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    flowSupport.onSaveInstanceState(outState, container.getCurrentChild());
+    flowSupport.onSaveInstanceState(outState);
     getBundleServiceRunner(this).onSaveInstanceState(outState);
   }
 
@@ -164,7 +167,9 @@ public class MortarDemoActivity extends ActionBarActivity
    */
   @Override
   public void onBackPressed() {
-    if (!containerAsHandlesBack.onBackPressed() && !flowSupport.onBackPressed()) super.onBackPressed();
+    if (containerAsBackTarget.onBackPressed()) return;
+    if (flowSupport.onBackPressed()) return;
+    super.onBackPressed();
   }
 
   /**

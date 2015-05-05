@@ -18,26 +18,22 @@ package io.techery.presenta.addition.flow.util;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-
+import flow.StateParceler;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import flow.Parceler;
-import flow.Path;
-
-public class GsonParceler implements Parceler {
+public class GsonParceler implements StateParceler {
   private final Gson gson;
 
   public GsonParceler(Gson gson) {
     this.gson = gson;
   }
 
-  @Override public Parcelable wrap(Path instance) {
+  @Override public Parcelable wrap(Object instance) {
     try {
       String json = encode(instance);
       return new Wrapper(json);
@@ -46,7 +42,7 @@ public class GsonParceler implements Parceler {
     }
   }
 
-  @Override public Path unwrap(Parcelable parcelable) {
+  @Override public Object unwrap(Parcelable parcelable) {
     Wrapper wrapper = (Wrapper) parcelable;
     try {
       return decode(wrapper.json);
@@ -55,7 +51,7 @@ public class GsonParceler implements Parceler {
     }
   }
 
-  private String encode(Path instance) throws IOException {
+  private String encode(Object instance) throws IOException {
     StringWriter stringWriter = new StringWriter();
     JsonWriter writer = new JsonWriter(stringWriter);
 
@@ -73,7 +69,7 @@ public class GsonParceler implements Parceler {
     }
   }
 
-  private Path decode(String json) throws IOException {
+  private Object decode(String json) throws IOException {
     JsonReader reader = new JsonReader(new StringReader(json));
 
     try {
@@ -103,7 +99,7 @@ public class GsonParceler implements Parceler {
       out.writeString(json);
     }
 
-    public static final Creator<Wrapper> CREATOR = new Creator<Wrapper>() {
+    public static final Parcelable.Creator<Wrapper> CREATOR = new Parcelable.Creator<Wrapper>() {
       @Override public Wrapper createFromParcel(Parcel in) {
         String json = in.readString();
         return new Wrapper(json);

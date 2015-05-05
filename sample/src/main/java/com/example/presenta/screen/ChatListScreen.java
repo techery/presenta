@@ -16,21 +16,17 @@
 package com.example.presenta.screen;
 
 import android.os.Bundle;
-
 import com.example.presenta.R;
 import com.example.presenta.model.Chat;
 import com.example.presenta.model.Chats;
 import com.example.presenta.view.ChatListView;
+import flow.Flow;
+import flow.path.Path;
+import io.techery.presenta.addition.flow.path.Layout;
 import io.techery.presenta.mortarscreen.presenter.InjectablePresenter;
 import io.techery.presenta.mortarscreen.presenter.WithPresenter;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
-import flow.Flow;
-import flow.Layout;
-import flow.Path;
 
 @Layout(R.layout.chat_list_view) @WithPresenter(ChatListScreen.Presenter.class)
 public class ChatListScreen extends Path {
@@ -52,7 +48,7 @@ public class ChatListScreen extends Path {
     }
 
     public void onConversationSelected(int position) {
-      Flow.get(getView()).goTo(new ChatScreen(position));
+      Flow.get(getView()).set(new ChatScreen(position));
     }
   }
 }
