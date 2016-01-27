@@ -23,10 +23,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.example.presenta.di.ScreenComponent;
 import com.example.presenta.screen.ChatListScreen;
 import com.example.presenta.screen.FriendListScreen;
 import com.google.gson.Gson;
+
+import javax.inject.Inject;
+
 import flow.Flow;
 import flow.FlowDelegate;
 import flow.History;
@@ -36,7 +40,6 @@ import io.techery.presenta.addition.ActionBarOwner;
 import io.techery.presenta.addition.flow.util.GsonParceler;
 import io.techery.presenta.di.ScreenScope;
 import io.techery.presenta.mortar.DaggerService;
-import javax.inject.Inject;
 import mortar.MortarScope;
 import mortar.MortarScopeDevHelper;
 import mortar.bundler.BundleServiceRunner;
@@ -152,7 +155,7 @@ public class MortarDemoActivity extends ActionBarActivity
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    flowSupport.onSaveInstanceState(outState);
+    flowSupport.onSaveInstanceState(outState, container.getCurrentChild());
     getBundleServiceRunner(this).onSaveInstanceState(outState);
   }
 
