@@ -5,6 +5,7 @@ import com.example.presenta.screen.ChatScreen;
 import com.example.presenta.screen.FriendListScreen;
 import com.example.presenta.screen.FriendScreen;
 import com.example.presenta.screen.MessageScreen;
+import com.example.presenta.vm.ChatListViewModel;
 
 public interface ScreenComponent {
   void inject(ChatScreen.Presenter presenter);
@@ -16,4 +17,6 @@ public interface ScreenComponent {
   void inject(FriendScreen.Presenter presenter);
 
   void inject(MessageScreen.Presenter presenter);
+
+  void inject(ChatListViewModel viewModel);
 }

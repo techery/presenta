@@ -28,37 +28,47 @@ import mortar.MortarScope;
 
 public class MortarDemoApplication extends Application {
 
-  @ApplicationScope
-  @Component(modules =  RootModule.class)
-  public interface AppComponent {
-    void inject(MortarDemoApplication application);
-    ActionBarOwner actionBarOwner();
-    Chats chats();
-  }
+    @ApplicationScope
+    @Component(modules = RootModule.class)
+    public interface AppComponent {
+        void inject(MortarDemoApplication application);
 
-  private MortarScope rootScope;
+        ActionBarOwner actionBarOwner();
 
-  @Override public void onCreate() {
-    super.onCreate();
-    instance = this;
+        Chats chats();
+    }
 
-    AppComponent component = DaggerService.createComponent(AppComponent.class);
-    rootScope = MortarScope.buildRootScope()
-        .withService(DaggerService.SERVICE_NAME, component)
-        .build("root");
-    component.inject(this);
-  }
+    private MortarScope rootScope;
 
-  public static MortarDemoApplication instance() {
-    return instance;
-  }
+    private AppComponent component;
 
-  private static MortarDemoApplication instance;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
 
-  @Override public Object getSystemService(String name) {
-    Object mortarService = rootScope.getService(name);
-    if (mortarService != null) return mortarService;
+        component = DaggerService.createComponent(AppComponent.class);
+        rootScope = MortarScope.buildRootScope()
+                .withService(DaggerService.SERVICE_NAME, component)
+                .build("root");
+        component.inject(this);
+    }
 
-    return super.getSystemService(name);
-  }
+    public AppComponent getAppComponent() {
+        return component;
+    }
+
+    public static MortarDemoApplication instance() {
+        return instance;
+    }
+
+    private static MortarDemoApplication instance;
+
+    @Override
+    public Object getSystemService(String name) {
+        Object mortarService = rootScope.getService(name);
+        if (mortarService != null) return mortarService;
+
+        return super.getSystemService(name);
+    }
 }

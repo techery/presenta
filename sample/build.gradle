@@ -21,6 +21,10 @@ android {
     packagingOptions {
         exclude 'LICENSE.txt'
     }
+
+    dataBinding {
+        enabled true
+    }
 }
 
 repositories {
@@ -31,6 +35,7 @@ repositories {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:recyclerview-v7:23.1.0'
 
     compile project(':library')
     compile project(':library-additions')
@@ -47,7 +52,7 @@ dependencies {
     compile 'com.google.dagger:dagger:2.0'
     apt 'com.google.dagger:dagger-compiler:2.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-    
+
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.jakewharton.timber:timber:2.7.1'
 

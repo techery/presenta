@@ -6,13 +6,13 @@ import mortar.ViewPresenter;
 
 public class InjectablePresenter<V extends View> extends ViewPresenter<V> {
 
-  public InjectablePresenter(PresenterInjector injector) {
-    injector.inject(this);
-  }
+    public InjectablePresenter(PresenterInjector injector) {
+        injector.inject(this);
+    }
 
-  @SuppressWarnings("unchecked")
-  public interface PresenterInjector {
-    void inject(InjectablePresenter presenter);
-  }
+    @SuppressWarnings("unchecked")
+    public interface PresenterInjector {
+        void inject(InjectablePresenter presenter);
+    }
 
 }

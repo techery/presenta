@@ -1,1 +1,1 @@
-include ':sample', ':library', ':library-additions'
+include ':sample', ':library', ':library-additions', ':presenta-mvvm'
